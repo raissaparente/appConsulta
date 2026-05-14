@@ -1,21 +1,17 @@
 import { View, Text, TextInput, FlatList, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-// hook que cuida de buscar o paciente lá no banco a cada digitação
 import { useBuscaPaciente } from '../../../src/hooks/useBuscaPaciente';
 
 export default function TelaPesquisa() {
   const roteador = useRouter();
-  // resultados: o array de pacientes que veio do banco de dados
-  // texto, setTexto: pra guardar o que a pessoa digitou
   const { texto, setTexto, resultados } = useBuscaPaciente();
 
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Pesquisar paciente</Text>
 
-      {/* input de texto normal, quando muda a gente atualiza o texto lá no hook */}
       <TextInput
-        placeholder="Digite o nome..."
+        placeholder="Digite o nome ou CPF..."
         value={texto}
         onChangeText={setTexto}
         style={styles.input}
@@ -24,8 +20,8 @@ export default function TelaPesquisa() {
       <FlatList
         data={resultados}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={{ flexGrow: 1 }}
         renderItem={({ item }) => (
-          // pressable é tipo um botão, mas sem estilo padrão. a gente vai poder estilizar como quiser
           <Pressable
             style={styles.item}
             onPress={() => roteador.push(`/paciente/${item.id}`)}
@@ -35,16 +31,32 @@ export default function TelaPesquisa() {
           </Pressable>
         )}
         ListEmptyComponent={
-          // se já digitou algo e o banco não achou nada, mostra a mensagem vazia
-          texto.length > 0 ? (
-            <Text>Nenhum paciente encontrado</Text>
-          ) : null
+          <View style={{ marginTop: 40, alignItems: 'center' }}>
+            {texto.trim().length === 0 ? (
+              <Text style={{ color: '#666', textAlign: 'center' }}>
+                Digite um nome ou CPF para buscar pacientes.
+              </Text>
+            ) : (
+              <Text style={{ color: '#666', textAlign: 'center' }}>
+                Nenhum paciente encontrado.
+              </Text>
+            )}
+          </View>
+        }
+        ListFooterComponent={
+          <View style={{ marginTop: 24, alignItems: 'center' }}>
+            <Pressable
+              style={styles.btnNovo}
+              onPress={() => roteador.push('/paciente/novo')}
+            >
+              <Text style={styles.btnNovoTexto}>+ Criar Novo Paciente</Text>
+            </Pressable>
+          </View>
         }
       />
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -78,4 +90,15 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 4,
   },
+  btnNovo: {
+    backgroundColor: '#1976d2',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  btnNovoTexto: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  }
 });
