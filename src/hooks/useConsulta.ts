@@ -1,13 +1,28 @@
-import { consultasMock } from '../data/consultasMock';
-import { medicosMock } from '../data/medicosMock';
+import { useEffect, useState } from 'react';
 
-export function useConsulta(consultaId: string) {
-  const consulta = consultasMock.find(c => c.id === consultaId);
+import { getConsultasDoPaciente } from '../services/consultaService';
 
-  const medico = medicosMock.find(m => m.id === consulta?.medicoId);
+export function useConsulta(pacienteId: string) {
+  const [consultas, setConsultas] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function carregarConsultas() {
+      try {
+        const dados = await getConsultasDoPaciente(pacienteId);
+        setConsultas(dados);
+      } catch (error) {
+        console.log('Erro ao buscar consultas:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    carregarConsultas();
+  }, [pacienteId]);
 
   return {
-    consulta,
-    medico,
+    consultas,
+    loading,
   };
 }
