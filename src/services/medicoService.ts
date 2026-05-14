@@ -1,4 +1,4 @@
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 
 import { Medico } from '../models/Medico';
 import { db } from './firebase';
@@ -22,4 +22,14 @@ export async function getMedicoById(
     id: snapshot.id,
     ...snapshot.data(),
   } as Medico;
+}
+
+export async function getMedicos() {
+  const medicosRef = collection(db, 'medicos');
+  const snapshot = await getDocs(medicosRef);
+
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Medico[];
 }
