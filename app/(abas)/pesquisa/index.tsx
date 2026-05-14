@@ -1,15 +1,19 @@
 import { View, Text, TextInput, FlatList, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+// hook que cuida de buscar o paciente lá no banco a cada digitação
 import { useBuscaPaciente } from '../../../src/hooks/useBuscaPaciente';
 
 export default function TelaPesquisa() {
   const roteador = useRouter();
+  // resultados: o array de pacientes que veio do banco de dados
+  // texto, setTexto: pra guardar o que a pessoa digitou
   const { texto, setTexto, resultados } = useBuscaPaciente();
 
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Pesquisar paciente</Text>
 
+      {/* input de texto normal, quando muda a gente atualiza o texto lá no hook */}
       <TextInput
         placeholder="Digite o nome..."
         value={texto}
@@ -21,6 +25,7 @@ export default function TelaPesquisa() {
         data={resultados}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
+          // pressable é tipo um botão, mas sem estilo padrão. a gente vai poder estilizar como quiser
           <Pressable
             style={styles.item}
             onPress={() => roteador.push(`/paciente/${item.id}`)}
@@ -30,6 +35,7 @@ export default function TelaPesquisa() {
           </Pressable>
         )}
         ListEmptyComponent={
+          // se já digitou algo e o banco não achou nada, mostra a mensagem vazia
           texto.length > 0 ? (
             <Text>Nenhum paciente encontrado</Text>
           ) : null
