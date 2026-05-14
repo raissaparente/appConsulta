@@ -4,7 +4,7 @@ import { Consulta } from '../models/Consulta';
 
 import { getPacienteById } from '../services/pacienteService';
 import { getMedicoById } from '../services/medicoService';
-import { getConsultasDoMedico } from '../services/consultaService';
+import { getTodasConsultas } from '../services/consultaService';
 
 type ConsultaComNomes = Consulta & {
   pacienteNome: string;
@@ -28,8 +28,9 @@ export function useConsultasHoje() {
   useEffect(() => {
     async function carregarConsultas() {
       try {
+        // busca TODAS as consultas do banco ao invés de buscar só do médico ID '1' (que era o antigo dado falso)
         const consultas =
-          await getConsultasDoMedico('1');
+          await getTodasConsultas();
 
         const consultasFiltradas =
           consultas.filter(c =>
