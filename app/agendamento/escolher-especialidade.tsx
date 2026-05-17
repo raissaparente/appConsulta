@@ -1,4 +1,4 @@
-import { View, Text, Pressable, FlatList } from 'react-native';
+import { View, Text, Pressable, FlatList, StyleSheet } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 
@@ -7,8 +7,8 @@ import { getMedicos } from '../../src/services/medicoService';
 
 export default function TelaEscolherEspecialidade() {
   const roteador = useRouter();
-  // o pacienteId vem da url (quando clicamos no botão de nova consulta na tela do paciente)
-  const { pacienteId } = useLocalSearchParams();
+  // o pacienteId, nome e cpf vêm da url (quando clicamos no botão de nova consulta na tela do paciente)
+  const params = useLocalSearchParams();
 
   const [especialidades, setEspecialidades] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,11 +33,20 @@ export default function TelaEscolherEspecialidade() {
     carregarEspecialidades();
   }, []);
 
-  if (loading) return <Text>Carregando especialidades...</Text>;
+  if (loading) return <Text style={styles.loading}>Carregando especialidades...</Text>;
 
   return (
-    <View style={{ padding: 16 }}>
-      <Text style={{ fontSize: 20, marginBottom: 16 }}>
+    <View style={styles.container}>
+      {/* CARD PROGRESSIVO: ETAPA 1 */}
+      {params.pacienteNome && (
+        <View style={styles.cardResumo}>
+          <Text style={styles.cardLabel}>Agendando para:</Text>
+          <Text style={styles.cardInfoNome}>{params.pacienteNome}</Text>
+          <Text style={styles.cardInfoSub}>CPF: {params.pacienteCpf}</Text>
+        </View>
+      )}
+
+      <Text style={styles.titulo}>
         Escolha a especialidade
       </Text>
 
@@ -46,16 +55,65 @@ export default function TelaEscolherEspecialidade() {
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
           <Pressable
-            style={{ padding: 16, backgroundColor: '#eee', marginBottom: 8, borderRadius: 8 }}
+            style={styles.botao}
             onPress={() =>
-              // manda a especialidade escolhida e repassa o pacienteId pra próxima tela
-              roteador.push(`/agendamento/escolher-medico?especialidade=${item}&pacienteId=${pacienteId}`)
+              // manda a especialidade escolhida e repassa todos os dados do paciente
+              roteador.push(`/agendamento/escolher-medico?especialidade=${item}&pacienteId=${params.pacienteId}&pacienteNome=${params.pacienteNome}&pacienteCpf=${params.pacienteCpf}`)
             }
           >
-            <Text>{item}</Text>
+            <Text style={styles.textoBotao}>{item}</Text>
           </Pressable>
         )}
       />
     </View>
   );
 }
+
+// Estilos globais dessa tela pro seu colega alterar depois
+const styles = StyleSheet.create({
+  container: {
+    flex: 1, 
+    padding: 16
+  },
+  loading: {
+    padding: 16
+  },
+  cardResumo: {
+    backgroundColor: '#e3f2fd',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 24,
+    borderLeftWidth: 4,
+    borderLeftColor: '#1565c0'
+  },
+  cardLabel: {
+    fontSize: 12,
+    color: '#1565c0',
+    fontWeight: 'bold',
+    marginBottom: 4
+  },
+  cardInfoNome: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333'
+  },
+  cardInfoSub: {
+    fontSize: 12,
+    color: '#666'
+  },
+  titulo: {
+    fontSize: 20, 
+    marginBottom: 16,
+    fontWeight: 'bold'
+  },
+  botao: {
+    padding: 16, 
+    backgroundColor: '#eee', 
+    marginBottom: 8, 
+    borderRadius: 8
+  },
+  textoBotao: {
+    fontSize: 16, 
+    fontWeight: '500'
+  }
+});

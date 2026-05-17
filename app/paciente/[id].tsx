@@ -14,7 +14,15 @@ export default function TelaPaciente() {
     <ScrollView style={styles.container}>
       {/* CARD DE DADOS DO PACIENTE */}
       <View style={styles.cardPaciente}>
-        <Text style={styles.nomePaciente}>{paciente?.nome}</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <Text style={styles.nomePaciente}>{paciente?.nome}</Text>
+          <Pressable 
+            onPress={() => roteador.push(`/paciente/novo?id=${id}`)}
+            style={{ padding: 8, backgroundColor: '#eee', borderRadius: 4 }}
+          >
+            <Text style={{ color: '#333', fontWeight: 'bold' }}>Editar</Text>
+          </Pressable>
+        </View>
         <Text style={styles.subtextoPaciente}>CPF: {paciente?.cpf}</Text>
         <Text style={styles.subtextoPaciente}>Nascimento: {paciente?.dataNascimento || 'Não informado'}</Text>
       </View>
@@ -53,7 +61,7 @@ export default function TelaPaciente() {
       {/* BOTÃO DE NOVA CONSULTA */}
       <Pressable
         style={styles.botaoNova}
-        onPress={() => roteador.push(`/agendamento/escolher-especialidade?pacienteId=${id}`)}
+        onPress={() => roteador.push(`/agendamento/escolher-especialidade?pacienteId=${id}&pacienteNome=${paciente?.nome}&pacienteCpf=${paciente?.cpf}`)}
       >
         <Text style={styles.textoBotao}>+ Nova Consulta</Text>
       </Pressable>

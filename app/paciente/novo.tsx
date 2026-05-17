@@ -1,16 +1,39 @@
 import { View, Text, TextInput, Pressable, Alert, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useState, useEffect } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../src/services/firebase';
+import { getPacienteById, atualizarPaciente } from '../../src/services/pacienteService';
 
 export default function TelaNovoPaciente() {
   const roteador = useRouter();
+  const params = useLocalSearchParams();
+  const isEdicao = !!params.id;
 
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [loading, setLoading] = useState(false);
+  const [carregandoDados, setCarregandoDados] = useState(isEdicao);
+
+  useEffect(() => {
+    async function carregarDados() {
+      if (!isEdicao) return;
+      try {
+        const paciente = await getPacienteById(String(params.id));
+        if (paciente) {
+          setNome(paciente.nome);
+          setCpf(paciente.cpf);
+          setDataNascimento(paciente.dataNascimento || '');
+        }
+      } catch (error) {
+        console.log('Erro ao carregar paciente para edição:', error);
+      } finally {
+        setCarregandoDados(false);
+      }
+    }
+    carregarDados();
+  }, [isEdicao, params.id]);
 
   async function salvarPaciente() {
     if (!nome.trim() || !cpf.trim() || !dataNascimento.trim()) {
@@ -20,28 +43,45 @@ export default function TelaNovoPaciente() {
 
     setLoading(true);
     try {
-      const docRef = await addDoc(collection(db, 'pacientes'), {
-        nome,
-        cpf,
-        dataNascimento,
-        criadoEm: new Date().toISOString()
-      });
+      if (isEdicao) {
+        await atualizarPaciente(String(params.id), {
+          nome,
+          cpf,
+          dataNascimento
+        });
+        Alert.alert('Sucesso', 'Paciente atualizado com sucesso!');
+        roteador.back(); // Volta pra tela de detalhes
+      } else {
+        const docRef = await addDoc(collection(db, 'pacientes'), {
+          nome,
+          cpf,
+          dataNascimento,
+          criadoEm: new Date().toISOString()
+        });
 
-      Alert.alert('Sucesso', 'Paciente cadastrado com sucesso!');
-      // volta pra tela anterior e já entra nos detalhes desse novo paciente
-      roteador.replace(`/paciente/${docRef.id}`);
+        Alert.alert('Sucesso', 'Paciente cadastrado com sucesso!');
+        roteador.replace(`/paciente/${docRef.id}`);
+      }
     } catch (error) {
       console.log('Erro ao salvar paciente:', error);
-      Alert.alert('Erro', 'Não foi possível cadastrar o paciente.');
+      Alert.alert('Erro', 'Não foi possível salvar o paciente.');
     } finally {
       setLoading(false);
     }
   }
 
+  if (carregandoDados) {
+    return (
+      <View style={styles.container}>
+        <Text>Carregando dados...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>
-        Novo Paciente
+        {isEdicao ? 'Editar Paciente' : 'Novo Paciente'}
       </Text>
 
       <Text style={styles.label}>Nome Completo</Text>

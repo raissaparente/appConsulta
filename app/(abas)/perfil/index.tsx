@@ -61,8 +61,31 @@ export default function TelaPerfil() {
         await addDoc(collection(db, 'consultas'), consulta);
       }
 
+      // CRIAR HORÁRIOS DISPONÍVEIS PARA OS PRÓXIMOS 7 DIAS
+      const horasDisponiveis = ['09:00', '10:30', '13:00', '15:30', '17:00'];
+      
+      for (let i = 0; i < 7; i++) {
+        const data = new Date();
+        data.setDate(data.getDate() + i);
+        const dataFmt = data.toISOString().split('T')[0];
+        
+        for (const medicoId of medicosRefs) {
+          for (const hora of horasDisponiveis) {
+            // não criar horário disponível se já foi usado nas consultas fake de hoje
+            if (i === 0 && medicoId === medicosRefs[0] && hora === '10:00') continue;
+            if (i === 0 && medicoId === medicosRefs[1] && hora === '14:30') continue;
+
+            await addDoc(collection(db, 'horarios'), {
+              medicoId,
+              dataHora: `${dataFmt}T${hora}`,
+              disponivel: true
+            });
+          }
+        }
+      }
+
       console.log('Seed concluído com sucesso!');
-      Alert.alert('Sucesso!', 'Pacientes e consultas de hoje criados no Firebase!');
+      Alert.alert('Sucesso!', 'Dados e horários gerados no Firebase!');
     } catch (error) {
       console.error('Erro no seed:', error);
       Alert.alert('Erro', 'Deu ruim, olha o terminal.');
