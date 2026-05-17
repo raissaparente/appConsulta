@@ -1,11 +1,29 @@
-import { View, Text, TextInput, Pressable, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
+
+import BotaoPrincipal from '../../src/components/BotaoPrincipal';
 
 export default function TelaAlterarSenha() {
   const roteador = useRouter();
 
-  function salvarNovaSenha() {
-    Alert.alert('Sucesso', 'Sua senha foi atualizada!');
+  const [senhaAtual, setSenhaAtual] = useState('');
+  const [novaSenha, setNovaSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState('');
+
+  function atualizarSenha() {
+    if (!senhaAtual || !novaSenha || !confirmarSenha) {
+      Alert.alert('Aviso', 'Preencha todos os campos!');
+      return;
+    }
+
+    if (novaSenha !== confirmarSenha) {
+      Alert.alert('Erro', 'A nova senha e a confirmação não batem.');
+      return;
+    }
+
+    // aqui iria a lógica de chamar o firebase auth pra trocar a senha
+    Alert.alert('Sucesso', 'Senha atualizada (fake)!');
     roteador.back();
   }
 
@@ -18,6 +36,8 @@ export default function TelaAlterarSenha() {
         style={styles.input}
         placeholder="Digite a senha atual"
         secureTextEntry
+        value={senhaAtual}
+        onChangeText={setSenhaAtual}
       />
 
       <Text style={styles.label}>Nova Senha</Text>
@@ -25,6 +45,8 @@ export default function TelaAlterarSenha() {
         style={styles.input}
         placeholder="Digite a nova senha"
         secureTextEntry
+        value={novaSenha}
+        onChangeText={setNovaSenha}
       />
 
       <Text style={styles.label}>Confirmar Nova Senha</Text>
@@ -32,14 +54,14 @@ export default function TelaAlterarSenha() {
         style={[styles.input, { marginBottom: 32 }]}
         placeholder="Confirme a nova senha"
         secureTextEntry
+        value={confirmarSenha}
+        onChangeText={setConfirmarSenha}
       />
 
-      <Pressable
-        style={styles.botao}
-        onPress={salvarNovaSenha}
-      >
-        <Text style={styles.textoBotao}>Atualizar Senha</Text>
-      </Pressable>
+      <BotaoPrincipal 
+        titulo="Atualizar Senha"
+        onPress={atualizarSenha} 
+      />
     </View>
   );
 }
@@ -66,16 +88,5 @@ const styles = StyleSheet.create({
     borderWidth: 1, 
     borderColor: '#ddd', 
     marginBottom: 16
-  },
-  botao: {
-    backgroundColor: '#1976d2', 
-    padding: 16, 
-    borderRadius: 8, 
-    alignItems: 'center'
-  },
-  textoBotao: {
-    color: 'white', 
-    fontWeight: 'bold', 
-    fontSize: 16
   }
 });

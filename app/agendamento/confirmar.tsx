@@ -1,112 +1,91 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Alert, StyleSheet } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
-
-import { criarConsulta, getConsultasDoMedico } from '../../src/services/consultaService';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../../src/services/firebase';
+import { useState } from 'react';
 import { bloquearHorario } from '../../src/services/horarioService';
-import { getPacienteById } from '../../src/services/pacienteService';
-import { getMedicoById } from '../../src/services/medicoService';
 
-import { Paciente } from '../../src/models/Paciente';
-import { Medico } from '../../src/models/Medico';
+import BotaoPrincipal from '../../src/components/BotaoPrincipal';
 
-export default function TelaConfirmar() {
+export default function TelaConfirmarAgendamento() {
   const roteador = useRouter();
   const params = useLocalSearchParams();
 
-  const [paciente, setPaciente] = useState<Paciente | null>(null);
-  const [medico, setMedico] = useState<Medico | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    async function carregarDadosReais() {
-      try {
-        if (params.pacienteId && params.medicoId) {
-          // Busca os dados do paciente e do médico em paralelo pra ser mais rápido
-          const [dadosPaciente, dadosMedico] = await Promise.all([
-            getPacienteById(String(params.pacienteId)),
-            getMedicoById(String(params.medicoId))
-          ]);
-          
-          setPaciente(dadosPaciente);
-          setMedico(dadosMedico);
-        }
-      } catch (error) {
-        console.log('Erro ao carregar dados:', error);
-      } finally {
-        setLoading(false);
-      }
+  // o params converte os arrays em string caso a url venha maluca
+  const pacienteId = String(params.pacienteId);
+  const medicoId = String(params.medicoId);
+  const dataHora = String(params.dataHora);
+  const horarioId = String(params.horarioId);
+  const pacienteNome = String(params.pacienteNome);
+  const pacienteCpf = String(params.pacienteCpf);
+  const especialidade = String(params.especialidade);
+  const medicoNome = String(params.medicoNome);
+
+  // formata a data ("2026-05-15T14:30") pra ficar legível pro usuário
+  const dataParte = dataHora.split('T')[0];
+  const horaParte = dataHora.split('T')[1];
+  const dataBr = dataParte.split('-').reverse().join('/');
+
+  async function confirmarAgendamento() {
+    if (!pacienteId || !medicoId || !dataHora || !horarioId) {
+      Alert.alert('Erro', 'Faltam dados para confirmar o agendamento.');
+      return;
     }
 
-    carregarDadosReais();
-  }, [params.pacienteId, params.medicoId]);
+    setLoading(true);
 
-  async function confirmarConsulta() {
     try {
-      const consultas = await getConsultasDoMedico(String(params.medicoId));
-
-      const consultaExistente = consultas.find(
-        c => c.dataHora === String(params.dataHora)
-      );
-
-      if (consultaExistente) {
-        alert('Já existe uma consulta nesse horário.');
-        return;
-      }
-
-      await criarConsulta({
-        pacienteId: String(params.pacienteId),
-        medicoId: String(params.medicoId),
-        dataHora: String(params.dataHora),
-        tipo: 'primeira',
+      // 1. cria a consulta no banco com status 'agendada'
+      await addDoc(collection(db, 'consultas'), {
+        pacienteId,
+        medicoId,
+        dataHora,
         status: 'agendada',
+        tipo: 'primeira' // depois podemos fazer lógica pra saber se é retorno
       });
 
-      await bloquearHorario(String(params.horarioId));
+      // 2. bloqueia o horário para ninguém mais pegar
+      await bloquearHorario(horarioId);
 
+      // manda pra tela de sucesso
       roteador.push('/agendamento/sucesso');
     } catch (error) {
-      console.log('Erro ao criar consulta:', error);
+      console.log('Erro ao confirmar:', error);
+      Alert.alert('Erro', 'Não foi possível confirmar o agendamento.');
+    } finally {
+      setLoading(false);
     }
   }
 
-  if (loading) return <Text style={styles.loading}>Carregando dados...</Text>;
-
-  // Transforma a string ISO (ex: 2026-05-15T09:00) em algo mais legível pra tela de confirmação
-  const [dataPart, horaPart] = String(params.dataHora).split('T');
-  const dataFormatada = dataPart.split('-').reverse().join('/'); // "15/05/2026"
-
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>
-        Confirmar consulta
-      </Text>
+      <Text style={styles.titulo}>Resumo do Agendamento</Text>
 
-      <View style={styles.blocoDados}>
+      <View style={styles.cardResumo}>
         <Text style={styles.label}>Paciente</Text>
-        <Text style={styles.nome}>{paciente?.nome}</Text>
-        <Text style={styles.subtexto}>CPF: {paciente?.cpf}</Text>
-      </View>
+        <Text style={styles.valor}>{pacienteNome}</Text>
+        <Text style={styles.valorSub}>CPF: {pacienteCpf}</Text>
 
-      <View style={styles.blocoDados}>
+        <View style={styles.divisor} />
+
         <Text style={styles.label}>Médico</Text>
-        <Text style={styles.nome}>{medico?.nome}</Text>
-        <Text style={styles.subtexto}>{medico?.especialidade} (CRM: {medico?.crm})</Text>
-      </View>
+        <Text style={styles.valor}>{medicoNome}</Text>
+        <Text style={styles.valorSub}>{especialidade}</Text>
 
-      <View style={styles.blocoDestaque}>
-        <Text style={styles.labelDestaque}>Data e Horário</Text>
-        <Text style={styles.textoDestaque}>
-          {dataFormatada} às {horaPart}
+        <View style={styles.divisor} />
+
+        <Text style={styles.label}>Data e Hora</Text>
+        <Text style={styles.valorDestaque}>
+          {dataBr} às {horaParte}
         </Text>
       </View>
 
-      <Pressable
-        style={styles.botaoConfirmar}
-        onPress={confirmarConsulta}
-      >
-        <Text style={styles.textoBotao}>Confirmar Agendamento</Text>
-      </Pressable>
+      <BotaoPrincipal 
+        titulo={loading ? 'Processando...' : 'Confirmar Agendamento'}
+        onPress={confirmarAgendamento} 
+      />
     </View>
   );
 }
@@ -116,56 +95,42 @@ const styles = StyleSheet.create({
   container: {
     padding: 16
   },
-  loading: {
-    padding: 16
-  },
   titulo: {
-    fontSize: 20, 
+    fontSize: 22, 
+    fontWeight: 'bold', 
     marginBottom: 24, 
-    fontWeight: 'bold'
+    textAlign: 'center'
   },
-  blocoDados: {
-    marginBottom: 16, 
-    backgroundColor: '#f5f5f5', 
-    padding: 16, 
-    borderRadius: 8
+  cardResumo: {
+    backgroundColor: '#fff', 
+    padding: 24, 
+    borderRadius: 12, 
+    elevation: 3, 
+    marginBottom: 32
   },
   label: {
-    color: '#666', 
-    fontSize: 12
-  },
-  nome: {
-    fontSize: 16, 
-    fontWeight: '500'
-  },
-  subtexto: {
     fontSize: 14, 
-    color: '#444'
+    color: '#666', 
+    marginBottom: 4
   },
-  blocoDestaque: {
-    marginBottom: 32, 
-    backgroundColor: '#e3f2fd', 
-    padding: 16, 
-    borderRadius: 8
-  },
-  labelDestaque: {
-    color: '#1565c0', 
-    fontSize: 12
-  },
-  textoDestaque: {
+  valor: {
     fontSize: 18, 
     fontWeight: 'bold', 
-    color: '#1565c0'
+    color: '#333'
   },
-  botaoConfirmar: {
-    backgroundColor: '#4caf50', 
-    padding: 16, 
-    borderRadius: 8, 
-    alignItems: 'center'
+  valorSub: {
+    fontSize: 14, 
+    color: '#888', 
+    marginTop: 2
   },
-  textoBotao: {
-    color: 'white', 
+  divisor: {
+    height: 1, 
+    backgroundColor: '#eee', 
+    marginVertical: 16
+  },
+  valorDestaque: {
+    fontSize: 20, 
     fontWeight: 'bold', 
-    fontSize: 16
+    color: '#1976d2'
   }
 });

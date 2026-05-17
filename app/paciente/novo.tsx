@@ -1,9 +1,11 @@
-import { View, Text, TextInput, Pressable, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../src/services/firebase';
 import { getPacienteById, atualizarPaciente } from '../../src/services/pacienteService';
+
+import BotaoPrincipal from '../../src/components/BotaoPrincipal';
 
 export default function TelaNovoPaciente() {
   const roteador = useRouter();
@@ -110,15 +112,10 @@ export default function TelaNovoPaciente() {
         onChangeText={setDataNascimento}
       />
 
-      <Pressable
-        style={styles.botao}
-        onPress={salvarPaciente}
-        disabled={loading}
-      >
-        <Text style={styles.textoBotao}>
-          {loading ? 'Salvando...' : 'Cadastrar Paciente'}
-        </Text>
-      </Pressable>
+      <BotaoPrincipal 
+        titulo={loading ? 'Salvando...' : 'Cadastrar Paciente'}
+        onPress={salvarPaciente} 
+      />
     </View>
   );
 }
@@ -145,16 +142,5 @@ const styles = StyleSheet.create({
     borderWidth: 1, 
     borderColor: '#ddd', 
     marginBottom: 16
-  },
-  botao: {
-    backgroundColor: '#4caf50', 
-    padding: 16, 
-    borderRadius: 8, 
-    alignItems: 'center'
-  },
-  textoBotao: {
-    color: 'white', 
-    fontWeight: 'bold', 
-    fontSize: 16
   }
 });
