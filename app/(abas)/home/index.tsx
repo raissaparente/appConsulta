@@ -50,12 +50,9 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 22,
-    fontWeight: 'bold',
     marginBottom: 16,
   },
   textoVazio: {
-    color: '#666',
-    fontStyle: 'italic',
     textAlign: 'center',
     marginTop: 20
   }

@@ -25,27 +25,19 @@ export default function CardPacienteLista({ paciente, onPress }: Props) {
 const styles = StyleSheet.create({
   card: {
     padding: 14,
-    backgroundColor: '#fff',
-    borderRadius: 10,
     marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
   },
   conteudo: {
     flex: 1,
   },
   nome: {
     fontSize: 16,
-    fontWeight: '600',
     marginBottom: 4,
   },
   subtexto: {
-    color: '#666',
     fontSize: 14,
     marginTop: 2,
   }

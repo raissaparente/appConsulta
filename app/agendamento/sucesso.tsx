@@ -37,12 +37,9 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 24, 
-    fontWeight: 'bold', 
     textAlign: 'center', 
-    color: '#4caf50'
   },
   subtitulo: {
     marginTop: 16, 
-    color: '#666'
   }
 });

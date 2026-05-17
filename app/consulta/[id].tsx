@@ -82,45 +82,32 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 22,
-    fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center'
   },
   cardInfo: {
-    backgroundColor: '#fff',
     padding: 24,
-    borderRadius: 12,
-    elevation: 3,
     marginBottom: 32
   },
   label: {
     fontSize: 14,
-    color: '#666',
     marginBottom: 4
   },
   valor: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333'
   },
   subValor: {
     fontSize: 14,
-    color: '#888',
     marginTop: 2
   },
   valorStatus: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#1976d2',
-    textTransform: 'capitalize'
   },
   divisor: {
     height: 1,
-    backgroundColor: '#eee',
     marginVertical: 16
   },
   botaoSecundario: {
-    backgroundColor: '#4caf50',
     marginTop: -24 
   }
 });

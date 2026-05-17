@@ -35,27 +35,19 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 24, 
-    fontWeight: 'bold', 
     marginBottom: 24
   },
   card: {
-    backgroundColor: '#fff', 
     padding: 16, 
-    borderRadius: 8, 
-    borderWidth: 1, 
-    borderColor: '#ddd', 
     marginBottom: 16
   },
   label: {
-    color: '#666', 
     fontSize: 12
   },
   valor: {
     fontSize: 16, 
-    fontWeight: '500'
   },
   rodape: {
-    color: '#666', 
     textAlign: 'center', 
     marginTop: 20
   }

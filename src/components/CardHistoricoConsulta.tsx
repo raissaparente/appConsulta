@@ -32,11 +32,8 @@ export default function CardHistoricoConsulta({ consulta, onPress }: Props) {
 //BRUNO: ESTILIZAR AQUI (estilos globais desse componente)
 const styles = StyleSheet.create({
   cardConsulta: {
-    backgroundColor: '#f8f9fa',
     padding: 16,
-    borderRadius: 8,
     marginBottom: 12,
-    borderLeftWidth: 4,
   },
   consultaHeader: {
     flexDirection: 'row', 
@@ -44,15 +41,11 @@ const styles = StyleSheet.create({
     marginBottom: 4
   },
   consultaDataHora: {
-    fontWeight: 'bold', 
     fontSize: 16
   },
   consultaStatus: {
-    color: '#666', 
-    textTransform: 'capitalize'
   },
   consultaMedico: {
-    color: '#555', 
     fontSize: 14,
     marginTop: 4
   }

@@ -62,16 +62,11 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 22,
-    fontWeight: 'bold',
     marginBottom: 12,
   },
   input: {
-    backgroundColor: '#fff',
     padding: 12,
-    borderRadius: 10,
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#ddd',
   },
   listContainer: {
     flexGrow: 1,
@@ -81,7 +76,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   emptyTexto: {
-    color: '#666',
     textAlign: 'center',
   }
 });

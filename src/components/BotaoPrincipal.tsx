@@ -17,16 +17,12 @@ export default function BotaoPrincipal({ titulo, onPress, style }: Props) {
 //BRUNO: ESTILIZAR AQUI (estilos globais desse componente)
 const styles = StyleSheet.create({
   botao: {
-    backgroundColor: '#1976d2',
     padding: 16,
-    borderRadius: 8,
     alignItems: 'center',
     marginTop: 12,
     marginBottom: 40
   },
   textoBotao: {
-    color: 'white', 
-    fontWeight: 'bold', 
     fontSize: 16
   }
 });

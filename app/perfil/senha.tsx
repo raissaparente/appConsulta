@@ -74,19 +74,13 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 24, 
-    fontWeight: 'bold', 
     marginBottom: 24
   },
   label: {
     marginBottom: 4, 
-    fontWeight: '500'
   },
   input: {
-    backgroundColor: '#fff', 
     padding: 12, 
-    borderRadius: 8, 
-    borderWidth: 1, 
-    borderColor: '#ddd', 
     marginBottom: 16
   }
 });

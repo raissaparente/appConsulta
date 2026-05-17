@@ -97,40 +97,29 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 22, 
-    fontWeight: 'bold', 
     marginBottom: 24, 
     textAlign: 'center'
   },
   cardResumo: {
-    backgroundColor: '#fff', 
     padding: 24, 
-    borderRadius: 12, 
-    elevation: 3, 
     marginBottom: 32
   },
   label: {
     fontSize: 14, 
-    color: '#666', 
     marginBottom: 4
   },
   valor: {
     fontSize: 18, 
-    fontWeight: 'bold', 
-    color: '#333'
   },
   valorSub: {
     fontSize: 14, 
-    color: '#888', 
     marginTop: 2
   },
   divisor: {
     height: 1, 
-    backgroundColor: '#eee', 
     marginVertical: 16
   },
   valorDestaque: {
     fontSize: 20, 
-    fontWeight: 'bold', 
-    color: '#1976d2'
   }
 });

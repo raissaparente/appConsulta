@@ -59,12 +59,9 @@ const styles = StyleSheet.create({
   },
   tituloSecao: {
     fontSize: 18, 
-    fontWeight: 'bold', 
     marginBottom: 12
   },
   textoVazio: {
-    color: '#666', 
-    fontStyle: 'italic', 
     marginBottom: 24
   }
 });

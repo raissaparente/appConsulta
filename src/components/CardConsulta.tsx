@@ -36,38 +36,26 @@ export default function CardConsulta({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
     padding: 16,
     marginVertical: 8,
-    borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
 
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
   },
   hora: {
     fontSize: 18,
-    fontWeight: 'bold',
   },
   conteudo: {
     flex: 1,
   },
   paciente: {
     fontSize: 16,
-    fontWeight: '600',
   },
   medico: {
-    color: '#666',
   },
   tipo: {
-    color: '#1976d2',
     fontSize: 12,
-    fontWeight: '500',
     marginTop: 4,
-    textTransform: 'capitalize',
   }
 });

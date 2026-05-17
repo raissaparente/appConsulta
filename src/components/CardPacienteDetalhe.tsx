@@ -24,11 +24,8 @@ export default function CardPacienteDetalhe({ paciente, onEditPress }: Props) {
 //BRUNO: ESTILIZAR AQUI (estilos globais desse componente)
 const styles = StyleSheet.create({
   cardPaciente: {
-    backgroundColor: '#fff', 
     padding: 16, 
-    borderRadius: 12, 
     marginBottom: 24, 
-    elevation: 2
   },
   headerCard: {
     flexDirection: 'row', 
@@ -38,20 +35,14 @@ const styles = StyleSheet.create({
   },
   botaoEditar: {
     padding: 8, 
-    backgroundColor: '#eee', 
-    borderRadius: 4
   },
   textoBotaoEditar: {
-    color: '#333', 
-    fontWeight: 'bold'
   },
   nomePaciente: {
     fontSize: 22, 
-    fontWeight: 'bold', 
     marginBottom: 8
   },
   subtextoPaciente: {
-    color: '#666', 
     marginBottom: 4
   }
 });

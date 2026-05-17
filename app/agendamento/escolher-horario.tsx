@@ -135,40 +135,28 @@ const styles = StyleSheet.create({
   },
   loading: {
     padding: 16,
-    color: '#666'
   },
   cardResumo: {
-    backgroundColor: '#e3f2fd',
     padding: 16,
-    borderRadius: 8,
     marginBottom: 24,
-    borderLeftWidth: 4,
-    borderLeftColor: '#1565c0'
   },
   cardLabel: {
     fontSize: 12,
-    color: '#1565c0',
-    fontWeight: 'bold',
     marginBottom: 4
   },
   cardInfoNome: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333'
   },
   cardInfoSub: {
     fontSize: 12,
-    color: '#666'
   },
   linhaDivisoria: {
     height: 1,
-    backgroundColor: '#bbdefb',
     marginVertical: 12
   },
   titulo: {
     fontSize: 20, 
     marginBottom: 16,
-    fontWeight: 'bold'
   },
   carrosselContainer: {
     marginBottom: 24
@@ -177,35 +165,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     marginRight: 8,
-    borderRadius: 20,
   },
   diaBotaoSelecionado: {
-    backgroundColor: '#1976d2',
   },
   diaBotaoInativo: {
-    backgroundColor: '#e0e0e0',
   },
   diaTextoSelecionado: {
-    color: 'white', 
-    fontWeight: 'bold'
   },
   diaTextoInativo: {
-    color: 'black', 
-    fontWeight: 'bold'
   },
   horarioBotao: {
     padding: 16, 
-    backgroundColor: '#eee', 
     marginBottom: 8, 
-    borderRadius: 8
   },
   horarioTexto: {
     fontSize: 16, 
-    fontWeight: '500'
   },
   emptyTexto: {
-    color: '#666',
-    fontStyle: 'italic',
     textAlign: 'center',
     marginTop: 20
   }

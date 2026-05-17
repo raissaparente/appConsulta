@@ -88,57 +88,39 @@ const styles = StyleSheet.create({
   },
   loading: {
     padding: 16,
-    color: '#666'
   },
   cardResumo: {
-    backgroundColor: '#e3f2fd',
     padding: 16,
-    borderRadius: 8,
     marginBottom: 24,
-    borderLeftWidth: 4,
-    borderLeftColor: '#1565c0'
   },
   cardLabel: {
     fontSize: 12,
-    color: '#1565c0',
-    fontWeight: 'bold',
     marginBottom: 4
   },
   cardInfoNome: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333'
   },
   cardInfoSub: {
     fontSize: 12,
-    color: '#666'
   },
   linhaDivisoria: {
     height: 1,
-    backgroundColor: '#bbdefb',
     marginVertical: 12
   },
   titulo: {
     fontSize: 20, 
     marginBottom: 16,
-    fontWeight: 'bold'
   },
   botao: {
     padding: 16, 
-    backgroundColor: '#eee', 
     marginBottom: 8, 
-    borderRadius: 8
   },
   textoBotao: {
     fontSize: 16, 
-    fontWeight: '500'
   },
   textoSub: {
     fontSize: 12, 
-    color: '#666'
   },
   emptyTexto: {
-    color: '#666',
-    fontStyle: 'italic'
   }
 });

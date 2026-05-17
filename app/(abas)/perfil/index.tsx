@@ -135,7 +135,6 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 24, 
-    fontWeight: 'bold', 
     marginBottom: 24
   },
   textoNome: {
@@ -144,33 +143,22 @@ const styles = StyleSheet.create({
   },
   botaoOpcao: {
     marginTop: 20, 
-    backgroundColor: '#eee', 
     padding: 16, 
-    borderRadius: 8
   },
   textoOpcao: {
-    fontWeight: '500'
   },
   areaTeste: {
     marginTop: 60, 
     padding: 16, 
-    backgroundColor: '#ffebee', 
-    borderRadius: 8
   },
   avisoTeste: {
-    color: '#c62828', 
     marginBottom: 10, 
-    fontWeight: 'bold'
   },
   botaoTeste: {
-    backgroundColor: '#c62828', 
     padding: 12, 
-    borderRadius: 8, 
     alignItems: 'center'
   },
   textoBotaoTeste: {
-    color: 'white', 
-    fontWeight: 'bold', 
     textAlign: 'center'
   }
 });
