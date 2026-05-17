@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 
 import CardConsulta from '../../../src/components/CardConsulta';
@@ -13,14 +13,8 @@ export default function TelaInicio() {
 
   return (
     // a view principal precisa flex: 1 pra ocupar a tela toda
-    <View style={{ flex: 1, padding: 16 }}>
-      <Text
-        style={{
-          fontSize: 22,
-          fontWeight: 'bold',
-          marginBottom: 16,
-        }}
-      >
+    <View style={styles.container}>
+      <Text style={styles.titulo}>
         Consultas de hoje
       </Text>
 
@@ -43,9 +37,28 @@ export default function TelaInicio() {
         )}
         // isso aqui é o que aparece se o firebase retornar vazio
         ListEmptyComponent={
-          <Text>Nenhuma consulta hoje</Text>
+          <Text style={styles.textoVazio}>Nenhuma consulta hoje</Text>
         }
       />
     </View>
   );
 }
+
+// Estilos globais dessa tela pro seu colega alterar depois
+const styles = StyleSheet.create({
+  container: {
+    flex: 1, 
+    padding: 16
+  },
+  titulo: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  textoVazio: {
+    color: '#666',
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginTop: 20
+  }
+});

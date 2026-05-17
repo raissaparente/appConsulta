@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Alert } from 'react-native';
+import { View, Text, Pressable, Alert, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../../src/services/firebase';
@@ -70,33 +70,33 @@ export default function TelaPerfil() {
   }
 
   return (
-    <View style={{ padding: 16 }}>
+    <View style={styles.container}>
       {/* tela crua de perfil, só com a estrutura dos dados */}
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 24 }}>Perfil do Funcionário</Text>
+      <Text style={styles.titulo}>Perfil do Funcionário</Text>
       
-      <Text style={{ marginTop: 20, fontSize: 16 }}>Nome: Funcionário Teste</Text>
+      <Text style={styles.textoNome}>Nome: Funcionário Teste</Text>
       
       <Pressable 
-        style={{ marginTop: 20, backgroundColor: '#eee', padding: 16, borderRadius: 8 }}
+        style={styles.botaoOpcao}
         onPress={() => roteador.push('/perfil/dados')}
       >
-        <Text style={{ fontWeight: '500' }}>Meus Dados</Text>
+        <Text style={styles.textoOpcao}>Meus Dados</Text>
       </Pressable>
       
       <Pressable 
-        style={{ marginTop: 20, backgroundColor: '#eee', padding: 16, borderRadius: 8 }}
+        style={styles.botaoOpcao}
         onPress={() => roteador.push('/perfil/senha')}
       >
-        <Text style={{ fontWeight: '500' }}>Alterar Senha</Text>
+        <Text style={styles.textoOpcao}>Alterar Senha</Text>
       </Pressable>
 
-      <View style={{ marginTop: 60, padding: 16, backgroundColor: '#ffebee', borderRadius: 8 }}>
-        <Text style={{ color: '#c62828', marginBottom: 10, fontWeight: 'bold' }}>Área de Teste (Remover depois)</Text>
+      <View style={styles.areaTeste}>
+        <Text style={styles.avisoTeste}>Área de Teste (Remover depois)</Text>
         <Pressable 
           onPress={popularBanco}
-          style={{ backgroundColor: '#c62828', padding: 12, borderRadius: 8, alignItems: 'center' }}
+          style={styles.botaoTeste}
         >
-          <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>
+          <Text style={styles.textoBotaoTeste}>
             Popular Firebase com Pacientes e Consultas (Hoje)
           </Text>
         </Pressable>
@@ -104,3 +104,50 @@ export default function TelaPerfil() {
     </View>
   );
 }
+
+// Estilos globais dessa tela pro seu colega alterar depois
+const styles = StyleSheet.create({
+  container: {
+    padding: 16
+  },
+  titulo: {
+    fontSize: 24, 
+    fontWeight: 'bold', 
+    marginBottom: 24
+  },
+  textoNome: {
+    marginTop: 20, 
+    fontSize: 16
+  },
+  botaoOpcao: {
+    marginTop: 20, 
+    backgroundColor: '#eee', 
+    padding: 16, 
+    borderRadius: 8
+  },
+  textoOpcao: {
+    fontWeight: '500'
+  },
+  areaTeste: {
+    marginTop: 60, 
+    padding: 16, 
+    backgroundColor: '#ffebee', 
+    borderRadius: 8
+  },
+  avisoTeste: {
+    color: '#c62828', 
+    marginBottom: 10, 
+    fontWeight: 'bold'
+  },
+  botaoTeste: {
+    backgroundColor: '#c62828', 
+    padding: 12, 
+    borderRadius: 8, 
+    alignItems: 'center'
+  },
+  textoBotaoTeste: {
+    color: 'white', 
+    fontWeight: 'bold', 
+    textAlign: 'center'
+  }
+});

@@ -1,28 +1,40 @@
 import { useEffect, useState } from 'react';
 
-import { getConsultasDoPaciente } from '../services/consultaService';
+import { getConsultaById } from '../services/consultaService';
+import { getMedicoById } from '../services/medicoService';
+import { Consulta } from '../models/Consulta';
+import { Medico } from '../models/Medico';
 
-export function useConsulta(pacienteId: string) {
-  const [consultas, setConsultas] = useState<any[]>([]);
+export function useConsulta(consultaId: string) {
+  const [consulta, setConsulta] = useState<Consulta | null>(null);
+  const [medico, setMedico] = useState<Medico | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function carregarConsultas() {
+    async function carregarConsulta() {
       try {
-        const dados = await getConsultasDoPaciente(pacienteId);
-        setConsultas(dados);
+        const dadosConsulta = await getConsultaById(consultaId);
+        setConsulta(dadosConsulta);
+
+        if (dadosConsulta && dadosConsulta.medicoId) {
+          const dadosMedico = await getMedicoById(dadosConsulta.medicoId);
+          setMedico(dadosMedico);
+        }
       } catch (error) {
-        console.log('Erro ao buscar consultas:', error);
+        console.log('Erro ao buscar consulta:', error);
       } finally {
         setLoading(false);
       }
     }
 
-    carregarConsultas();
-  }, [pacienteId]);
+    if (consultaId) {
+      carregarConsulta();
+    }
+  }, [consultaId]);
 
   return {
-    consultas,
+    consulta,
+    medico,
     loading,
   };
 }

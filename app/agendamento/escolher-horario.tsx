@@ -1,4 +1,4 @@
-import { View, Text, Pressable, FlatList, ScrollView } from 'react-native';
+import { View, Text, Pressable, FlatList, ScrollView, StyleSheet } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { HorarioDisponivel } from '../../src/models/HorarioDisponivel';
@@ -55,34 +55,34 @@ export default function TelaEscolherHorario() {
   // Filtra pela data (ex: "2026-05-15") ignorando a hora
   horariosFiltrados = horariosFiltrados.filter(h => h.dataHora.startsWith(diaSelecionado));
 
-  if (loading) return <Text>Carregando horários...</Text>;
+  if (loading) return <Text style={styles.loading}>Carregando horários...</Text>;
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
-      <Text style={{ fontSize: 20, marginBottom: 16 }}>
+    <View style={styles.container}>
+      <Text style={styles.titulo}>
         Escolher horário
       </Text>
 
       {/* Carrossel Horizontal de Datas ("Calendário") */}
-      <View style={{ marginBottom: 24 }}>
+      <View style={styles.carrosselContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {dias.map(dia => (
-            <Pressable
-              key={dia.dataStr}
-              onPress={() => setDiaSelecionado(dia.dataStr)}
-              style={{
-                paddingHorizontal: 16,
-                paddingVertical: 8,
-                marginRight: 8,
-                borderRadius: 20,
-                backgroundColor: diaSelecionado === dia.dataStr ? '#1976d2' : '#e0e0e0',
-              }}
-            >
-              <Text style={{ color: diaSelecionado === dia.dataStr ? 'white' : 'black', fontWeight: 'bold' }}>
-                {dia.label}
-              </Text>
-            </Pressable>
-          ))}
+          {dias.map(dia => {
+            const isSelecionado = diaSelecionado === dia.dataStr;
+            return (
+              <Pressable
+                key={dia.dataStr}
+                onPress={() => setDiaSelecionado(dia.dataStr)}
+                style={[
+                  styles.diaBotao,
+                  isSelecionado ? styles.diaBotaoSelecionado : styles.diaBotaoInativo
+                ]}
+              >
+                <Text style={isSelecionado ? styles.diaTextoSelecionado : styles.diaTextoInativo}>
+                  {dia.label}
+                </Text>
+              </Pressable>
+            );
+          })}
         </ScrollView>
       </View>
 
@@ -95,21 +95,77 @@ export default function TelaEscolherHorario() {
           const horaString = item.dataHora.split('T')[1];
           return (
             <Pressable
-              style={{ padding: 16, backgroundColor: '#eee', marginBottom: 8, borderRadius: 8 }}
+              style={styles.horarioBotao}
               onPress={() =>
                 roteador.push(
                   `/agendamento/confirmar?horarioId=${item.id}&dataHora=${item.dataHora}&medicoId=${item.medicoId}&pacienteId=${params.pacienteId}`
                 )
               }
             >
-              <Text style={{ fontSize: 16, fontWeight: '500' }}>{horaString}</Text>
+              <Text style={styles.horarioTexto}>{horaString}</Text>
             </Pressable>
           );
         }}
         ListEmptyComponent={
-          <Text>Nenhum horário disponível neste dia.</Text>
+          <Text style={styles.emptyTexto}>Nenhum horário disponível neste dia.</Text>
         }
       />
     </View>
   );
 }
+
+// Estilos globais dessa tela pro seu colega alterar depois
+const styles = StyleSheet.create({
+  container: {
+    flex: 1, 
+    padding: 16
+  },
+  loading: {
+    padding: 16,
+    color: '#666'
+  },
+  titulo: {
+    fontSize: 20, 
+    marginBottom: 16,
+    fontWeight: 'bold'
+  },
+  carrosselContainer: {
+    marginBottom: 24
+  },
+  diaBotao: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginRight: 8,
+    borderRadius: 20,
+  },
+  diaBotaoSelecionado: {
+    backgroundColor: '#1976d2',
+  },
+  diaBotaoInativo: {
+    backgroundColor: '#e0e0e0',
+  },
+  diaTextoSelecionado: {
+    color: 'white', 
+    fontWeight: 'bold'
+  },
+  diaTextoInativo: {
+    color: 'black', 
+    fontWeight: 'bold'
+  },
+  horarioBotao: {
+    padding: 16, 
+    backgroundColor: '#eee', 
+    marginBottom: 8, 
+    borderRadius: 8
+  },
+  horarioTexto: {
+    fontSize: 16, 
+    fontWeight: '500'
+  },
+  emptyTexto: {
+    color: '#666',
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginTop: 20
+  }
+});

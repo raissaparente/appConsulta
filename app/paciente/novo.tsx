@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Pressable, Alert } from 'react-native';
+import { View, Text, TextInput, Pressable, Alert, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
@@ -39,31 +39,31 @@ export default function TelaNovoPaciente() {
   }
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 24 }}>
+    <View style={styles.container}>
+      <Text style={styles.titulo}>
         Novo Paciente
       </Text>
 
-      <Text style={{ marginBottom: 4, fontWeight: '500' }}>Nome Completo</Text>
+      <Text style={styles.label}>Nome Completo</Text>
       <TextInput
-        style={{ backgroundColor: '#fff', padding: 12, borderRadius: 8, borderWidth: 1, borderColor: '#ddd', marginBottom: 16 }}
+        style={styles.input}
         placeholder="Ex: João da Silva"
         value={nome}
         onChangeText={setNome}
       />
 
-      <Text style={{ marginBottom: 4, fontWeight: '500' }}>CPF</Text>
+      <Text style={styles.label}>CPF</Text>
       <TextInput
-        style={{ backgroundColor: '#fff', padding: 12, borderRadius: 8, borderWidth: 1, borderColor: '#ddd', marginBottom: 16 }}
+        style={styles.input}
         placeholder="000.000.000-00"
         keyboardType="numeric"
         value={cpf}
         onChangeText={setCpf}
       />
 
-      <Text style={{ marginBottom: 4, fontWeight: '500' }}>Data de Nascimento</Text>
+      <Text style={styles.label}>Data de Nascimento</Text>
       <TextInput
-        style={{ backgroundColor: '#fff', padding: 12, borderRadius: 8, borderWidth: 1, borderColor: '#ddd', marginBottom: 32 }}
+        style={[styles.input, { marginBottom: 32 }]}
         placeholder="DD/MM/AAAA"
         keyboardType="numeric"
         value={dataNascimento}
@@ -71,14 +71,50 @@ export default function TelaNovoPaciente() {
       />
 
       <Pressable
-        style={{ backgroundColor: '#4caf50', padding: 16, borderRadius: 8, alignItems: 'center' }}
+        style={styles.botao}
         onPress={salvarPaciente}
         disabled={loading}
       >
-        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>
+        <Text style={styles.textoBotao}>
           {loading ? 'Salvando...' : 'Cadastrar Paciente'}
         </Text>
       </Pressable>
     </View>
   );
 }
+
+// Estilos globais dessa tela pro seu colega alterar depois
+const styles = StyleSheet.create({
+  container: {
+    flex: 1, 
+    padding: 16
+  },
+  titulo: {
+    fontSize: 24, 
+    fontWeight: 'bold', 
+    marginBottom: 24
+  },
+  label: {
+    marginBottom: 4, 
+    fontWeight: '500'
+  },
+  input: {
+    backgroundColor: '#fff', 
+    padding: 12, 
+    borderRadius: 8, 
+    borderWidth: 1, 
+    borderColor: '#ddd', 
+    marginBottom: 16
+  },
+  botao: {
+    backgroundColor: '#4caf50', 
+    padding: 16, 
+    borderRadius: 8, 
+    alignItems: 'center'
+  },
+  textoBotao: {
+    color: 'white', 
+    fontWeight: 'bold', 
+    fontSize: 16
+  }
+});

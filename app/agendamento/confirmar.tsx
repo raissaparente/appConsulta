@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 
@@ -70,43 +70,102 @@ export default function TelaConfirmar() {
     }
   }
 
-  if (loading) return <Text style={{ padding: 16 }}>Carregando dados...</Text>;
+  if (loading) return <Text style={styles.loading}>Carregando dados...</Text>;
 
   // Transforma a string ISO (ex: 2026-05-15T09:00) em algo mais legível pra tela de confirmação
   const [dataPart, horaPart] = String(params.dataHora).split('T');
   const dataFormatada = dataPart.split('-').reverse().join('/'); // "15/05/2026"
 
   return (
-    <View style={{ padding: 16 }}>
-      <Text style={{ fontSize: 20, marginBottom: 24, fontWeight: 'bold' }}>
+    <View style={styles.container}>
+      <Text style={styles.titulo}>
         Confirmar consulta
       </Text>
 
-      <View style={{ marginBottom: 16, backgroundColor: '#f5f5f5', padding: 16, borderRadius: 8 }}>
-        <Text style={{ color: '#666', fontSize: 12 }}>Paciente</Text>
-        <Text style={{ fontSize: 16, fontWeight: '500' }}>{paciente?.nome}</Text>
-        <Text style={{ fontSize: 14, color: '#444' }}>CPF: {paciente?.cpf}</Text>
+      <View style={styles.blocoDados}>
+        <Text style={styles.label}>Paciente</Text>
+        <Text style={styles.nome}>{paciente?.nome}</Text>
+        <Text style={styles.subtexto}>CPF: {paciente?.cpf}</Text>
       </View>
 
-      <View style={{ marginBottom: 16, backgroundColor: '#f5f5f5', padding: 16, borderRadius: 8 }}>
-        <Text style={{ color: '#666', fontSize: 12 }}>Médico</Text>
-        <Text style={{ fontSize: 16, fontWeight: '500' }}>{medico?.nome}</Text>
-        <Text style={{ fontSize: 14, color: '#444' }}>{medico?.especialidade} (CRM: {medico?.crm})</Text>
+      <View style={styles.blocoDados}>
+        <Text style={styles.label}>Médico</Text>
+        <Text style={styles.nome}>{medico?.nome}</Text>
+        <Text style={styles.subtexto}>{medico?.especialidade} (CRM: {medico?.crm})</Text>
       </View>
 
-      <View style={{ marginBottom: 32, backgroundColor: '#e3f2fd', padding: 16, borderRadius: 8 }}>
-        <Text style={{ color: '#1565c0', fontSize: 12 }}>Data e Horário</Text>
-        <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1565c0' }}>
+      <View style={styles.blocoDestaque}>
+        <Text style={styles.labelDestaque}>Data e Horário</Text>
+        <Text style={styles.textoDestaque}>
           {dataFormatada} às {horaPart}
         </Text>
       </View>
 
       <Pressable
-        style={{ backgroundColor: '#4caf50', padding: 16, borderRadius: 8, alignItems: 'center' }}
+        style={styles.botaoConfirmar}
         onPress={confirmarConsulta}
       >
-        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Confirmar Agendamento</Text>
+        <Text style={styles.textoBotao}>Confirmar Agendamento</Text>
       </Pressable>
     </View>
   );
 }
+
+// Estilos globais dessa tela pro seu colega alterar depois
+const styles = StyleSheet.create({
+  container: {
+    padding: 16
+  },
+  loading: {
+    padding: 16
+  },
+  titulo: {
+    fontSize: 20, 
+    marginBottom: 24, 
+    fontWeight: 'bold'
+  },
+  blocoDados: {
+    marginBottom: 16, 
+    backgroundColor: '#f5f5f5', 
+    padding: 16, 
+    borderRadius: 8
+  },
+  label: {
+    color: '#666', 
+    fontSize: 12
+  },
+  nome: {
+    fontSize: 16, 
+    fontWeight: '500'
+  },
+  subtexto: {
+    fontSize: 14, 
+    color: '#444'
+  },
+  blocoDestaque: {
+    marginBottom: 32, 
+    backgroundColor: '#e3f2fd', 
+    padding: 16, 
+    borderRadius: 8
+  },
+  labelDestaque: {
+    color: '#1565c0', 
+    fontSize: 12
+  },
+  textoDestaque: {
+    fontSize: 18, 
+    fontWeight: 'bold', 
+    color: '#1565c0'
+  },
+  botaoConfirmar: {
+    backgroundColor: '#4caf50', 
+    padding: 16, 
+    borderRadius: 8, 
+    alignItems: 'center'
+  },
+  textoBotao: {
+    color: 'white', 
+    fontWeight: 'bold', 
+    fontSize: 16
+  }
+});
