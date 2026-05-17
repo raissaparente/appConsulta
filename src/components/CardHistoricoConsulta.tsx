@@ -1,8 +1,8 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { Consulta } from '../models/Consulta';
+import { ConsultaPaciente } from '../hooks/usePaciente';
 
 type Props = {
-  consulta: Consulta;
+  consulta: ConsultaPaciente;
   onPress: () => void;
 };
 
@@ -22,7 +22,9 @@ export default function CardHistoricoConsulta({ consulta, onPress }: Props) {
         <Text style={styles.consultaDataHora}>{dataFmt} às {hora}</Text>
         <Text style={styles.consultaStatus}>{consulta.status}</Text>
       </View>
-      <Text style={styles.consultaId}>ID Médico: {consulta.medicoId}</Text>
+      <Text style={styles.consultaMedico}>
+        {consulta.medicoNome} {consulta.especialidadeMedico ? `• ${consulta.especialidadeMedico}` : ''}
+      </Text>
     </Pressable>
   );
 }
@@ -49,8 +51,9 @@ const styles = StyleSheet.create({
     color: '#666', 
     textTransform: 'capitalize'
   },
-  consultaId: {
-    color: '#888', 
-    fontSize: 12
+  consultaMedico: {
+    color: '#555', 
+    fontSize: 14,
+    marginTop: 4
   }
 });
