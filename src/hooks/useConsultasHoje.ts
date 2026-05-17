@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 import { Consulta } from '../models/Consulta';
 
@@ -25,58 +26,40 @@ export function useConsultasHoje() {
 
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function carregarConsultas() {
-      try {
-        // busca TODAS as consultas do banco ao invés de buscar só do médico ID '1' (que era o antigo dado falso)
-        const consultas =
-          await getTodasConsultas();
+  useFocusEffect(
+    useCallback(() => {
+      async function carregarConsultas() {
+        setLoading(true);
+        try {
+          // busca TODAS as consultas do banco ao invés de buscar só do médico ID '1' (que era o antigo dado falso)
+          const consultas = await getTodasConsultas();
 
-        const consultasFiltradas =
-          consultas.filter(c =>
-            isHoje(c.dataHora)
-          );
+          const consultasFiltradas = consultas.filter(c => isHoje(c.dataHora));
 
-        const consultasComNomes =
-          await Promise.all(
+          const consultasComNomes = await Promise.all(
             consultasFiltradas.map(async c => {
-              const paciente =
-                await getPacienteById(
-                  c.pacienteId
-                );
-
-              const medico =
-                await getMedicoById(
-                  c.medicoId
-                );
+              const paciente = await getPacienteById(c.pacienteId);
+              const medico = await getMedicoById(c.medicoId);
 
               return {
                 ...c,
-                pacienteNome:
-                  paciente?.nome ??
-                  'Paciente',
-                medicoNome:
-                  medico?.nome ??
-                  'Médico',
+                pacienteNome: paciente?.nome ?? 'Paciente',
+                medicoNome: medico?.nome ?? 'Médico',
               };
             })
           );
 
-        setConsultasHoje(
-          consultasComNomes
-        );
-      } catch (error) {
-        console.log(
-          'Erro ao carregar consultas:',
-          error
-        );
-      } finally {
-        setLoading(false);
+          setConsultasHoje(consultasComNomes);
+        } catch (error) {
+          console.log('Erro ao carregar consultas:', error);
+        } finally {
+          setLoading(false);
+        }
       }
-    }
 
-    carregarConsultas();
-  }, []);
+      carregarConsultas();
+    }, [])
+  );
 
   return {
     consultasHoje,
