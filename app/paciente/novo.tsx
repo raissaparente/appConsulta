@@ -1,5 +1,5 @@
 import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../src/services/firebase';
@@ -82,6 +82,7 @@ export default function TelaNovoPaciente() {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ title: isEdicao ? 'Editar Paciente' : 'Novo Paciente' }} />
       <Text style={styles.titulo}>
         {isEdicao ? 'Editar Paciente' : 'Novo Paciente'}
       </Text>
