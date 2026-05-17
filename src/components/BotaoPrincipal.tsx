@@ -17,6 +17,7 @@ export default function BotaoPrincipal({ titulo, onPress, style }: Props) {
 //BRUNO: ESTILIZAR AQUI (estilos globais desse componente)
 const styles = StyleSheet.create({
   botao: {
+    backgroundColor: '#fff',
     padding: 16,
     alignItems: 'center',
     marginTop: 12,

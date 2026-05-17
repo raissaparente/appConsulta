@@ -24,6 +24,7 @@ export default function CardPacienteDetalhe({ paciente, onEditPress }: Props) {
 //BRUNO: ESTILIZAR AQUI (estilos globais desse componente)
 const styles = StyleSheet.create({
   cardPaciente: {
+    backgroundColor: '#fff',
     padding: 16, 
     marginBottom: 24, 
   },
@@ -34,6 +35,7 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   botaoEditar: {
+    backgroundColor: '#eee',
     padding: 8, 
   },
   textoBotaoEditar: {

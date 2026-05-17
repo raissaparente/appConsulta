@@ -24,6 +24,7 @@ export default function CardPacienteLista({ paciente, onPress }: Props) {
 //BRUNO: ESTILIZAR AQUI (estilos globais desse componente)
 const styles = StyleSheet.create({
   card: {
+    backgroundColor: '#fff',
     padding: 14,
     marginBottom: 10,
     flexDirection: 'row',

@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   cardResumo: {
+    backgroundColor: '#fff',
     padding: 24, 
     marginBottom: 32
   },

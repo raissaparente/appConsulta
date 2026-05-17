@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   cardInfo: {
+    backgroundColor: '#fff',
     padding: 24,
     marginBottom: 32
   },

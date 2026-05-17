@@ -32,6 +32,7 @@ export default function CardHistoricoConsulta({ consulta, onPress }: Props) {
 //BRUNO: ESTILIZAR AQUI (estilos globais desse componente)
 const styles = StyleSheet.create({
   cardConsulta: {
+    backgroundColor: '#fff',
     padding: 16,
     marginBottom: 12,
   },

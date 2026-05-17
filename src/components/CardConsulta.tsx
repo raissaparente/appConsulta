@@ -36,6 +36,7 @@ export default function CardConsulta({
 
 const styles = StyleSheet.create({
   card: {
+    backgroundColor: '#fff',
     padding: 16,
     marginVertical: 8,
     flexDirection: 'row',
