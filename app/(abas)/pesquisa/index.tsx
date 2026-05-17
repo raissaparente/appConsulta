@@ -1,6 +1,9 @@
 import { useRouter } from 'expo-router';
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useBuscaPaciente } from '../../../src/hooks/useBuscaPaciente';
+
+import BotaoPrincipal from '../../../src/components/BotaoPrincipal';
+import CardPacienteLista from '../../../src/components/CardPacienteLista';
 
 export default function TelaPesquisa() {
   const roteador = useRouter();
@@ -22,13 +25,10 @@ export default function TelaPesquisa() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
         renderItem={({ item }) => (
-          <Pressable
-            style={styles.item}
+          <CardPacienteLista 
+            paciente={item}
             onPress={() => roteador.push(`/paciente/${item.id}`)}
-          >
-            <Text style={styles.nome}>{item.nome}</Text>
-            <Text style={styles.sub}>CPF: {item.cpf}</Text>
-          </Pressable>
+          />
         )}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
@@ -44,14 +44,10 @@ export default function TelaPesquisa() {
           </View>
         }
         ListFooterComponent={
-          <View style={styles.footerContainer}>
-            <Pressable
-              style={styles.btnNovo}
-              onPress={() => roteador.push('/paciente/novo')}
-            >
-              <Text style={styles.btnNovoTexto}>+ Criar Novo Paciente</Text>
-            </Pressable>
-          </View>
+          <BotaoPrincipal
+            titulo="+ Criar Novo Paciente"
+            onPress={() => roteador.push('/paciente/novo')}
+          />
         }
       />
     </View>
@@ -80,20 +76,6 @@ const styles = StyleSheet.create({
   listContainer: {
     flexGrow: 1,
   },
-  item: {
-    padding: 14,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  nome: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  sub: {
-    color: '#666',
-    marginTop: 4,
-  },
   emptyContainer: {
     marginTop: 40,
     alignItems: 'center',
@@ -101,20 +83,5 @@ const styles = StyleSheet.create({
   emptyTexto: {
     color: '#666',
     textAlign: 'center',
-  },
-  footerContainer: {
-    marginTop: 24,
-    alignItems: 'center',
-  },
-  btnNovo: {
-    backgroundColor: '#1976d2',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
-  },
-  btnNovoTexto: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
   }
 });

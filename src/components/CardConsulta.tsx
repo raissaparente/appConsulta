@@ -4,6 +4,8 @@ type Props = {
   pacienteNome: string;
   medicoNome: string;
   dataHora: string;
+  tipo?: string;
+  especialidadeMedico?: string;
   onPress: () => void;
 };
 
@@ -11,6 +13,8 @@ export default function CardConsulta({
   pacienteNome,
   medicoNome,
   dataHora,
+  tipo,
+  especialidadeMedico,
   onPress,
 }: Props) {
   const hora = dataHora.split('T')[1].slice(0, 5);
@@ -19,9 +23,12 @@ export default function CardConsulta({
     <Pressable onPress={onPress} style={styles.card}>
       <Text style={styles.hora}>{hora}</Text>
 
-      <View>
+      <View style={styles.conteudo}>
         <Text style={styles.paciente}>{pacienteNome}</Text>
-        <Text style={styles.medico}>{medicoNome}</Text>
+        <Text style={styles.medico}>
+          {medicoNome}{especialidadeMedico ? ` • ${especialidadeMedico}` : ''}
+        </Text>
+        {tipo && <Text style={styles.tipo}>{tipo}</Text>}
       </View>
     </Pressable>
   );
@@ -46,6 +53,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  conteudo: {
+    flex: 1,
+  },
   paciente: {
     fontSize: 16,
     fontWeight: '600',
@@ -53,4 +63,11 @@ const styles = StyleSheet.create({
   medico: {
     color: '#666',
   },
+  tipo: {
+    color: '#1976d2',
+    fontSize: 12,
+    fontWeight: '500',
+    marginTop: 4,
+    textTransform: 'capitalize',
+  }
 });

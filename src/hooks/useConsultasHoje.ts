@@ -10,6 +10,7 @@ import { getTodasConsultas } from '../services/consultaService';
 type ConsultaComNomes = Consulta & {
   pacienteNome: string;
   medicoNome: string;
+  especialidadeMedico: string;
 };
 
 function isHoje(data: string) {
@@ -45,6 +46,7 @@ export function useConsultasHoje() {
                 ...c,
                 pacienteNome: paciente?.nome ?? 'Paciente',
                 medicoNome: medico?.nome ?? 'Médico',
+                especialidadeMedico: medico?.especialidade ?? 'Geral',
               };
             })
           );

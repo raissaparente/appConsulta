@@ -25,6 +25,8 @@ export default function TelaInicio() {
             pacienteNome={item.pacienteNome}
             medicoNome={item.medicoNome}
             dataHora={item.dataHora}
+            tipo={item.tipo}
+            especialidadeMedico={item.especialidadeMedico}
             onPress={() =>
               //nav pro detalhe da consulta
               roteador.push(`/consulta/${item.id}`)
