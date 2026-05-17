@@ -1,6 +1,9 @@
-import { View, Text, TextInput, FlatList, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useBuscaPaciente } from '../../../src/hooks/useBuscaPaciente';
+
+import BotaoPrincipal from '../../../src/components/BotaoPrincipal';
+import CardPacienteLista from '../../../src/components/CardPacienteLista';
 
 export default function TelaPesquisa() {
   const roteador = useRouter();
@@ -11,7 +14,7 @@ export default function TelaPesquisa() {
       <Text style={styles.titulo}>Pesquisar paciente</Text>
 
       <TextInput
-        placeholder="Digite o nome..."
+        placeholder="Digite o nome ou CPF..."
         value={texto}
         onChangeText={setTexto}
         style={styles.input}
@@ -20,26 +23,38 @@ export default function TelaPesquisa() {
       <FlatList
         data={resultados}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.listContainer}
         renderItem={({ item }) => (
-          <Pressable
-            style={styles.item}
+          <CardPacienteLista 
+            paciente={item}
             onPress={() => roteador.push(`/paciente/${item.id}`)}
-          >
-            <Text style={styles.nome}>{item.nome}</Text>
-            <Text style={styles.sub}>CPF: {item.cpf}</Text>
-          </Pressable>
+          />
         )}
         ListEmptyComponent={
-          texto.length > 0 ? (
-            <Text>Nenhum paciente encontrado</Text>
-          ) : null
+          <View style={styles.emptyContainer}>
+            {texto.trim().length === 0 ? (
+              <Text style={styles.emptyTexto}>
+                Digite um nome ou CPF para buscar pacientes.
+              </Text>
+            ) : (
+              <Text style={styles.emptyTexto}>
+                Nenhum paciente encontrado.
+              </Text>
+            )}
+          </View>
+        }
+        ListFooterComponent={
+          <BotaoPrincipal
+            titulo="+ Criar Novo Paciente"
+            onPress={() => roteador.push('/paciente/novo')}
+          />
         }
       />
     </View>
   );
 }
 
-
+//BRUNO: ESTILIZAR AQUI (estilos globais dessa tela)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -47,29 +62,20 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 22,
-    fontWeight: 'bold',
     marginBottom: 12,
   },
   input: {
-    backgroundColor: '#fff',
     padding: 12,
-    borderRadius: 10,
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#ddd',
   },
-  item: {
-    padding: 14,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    marginBottom: 10,
+  listContainer: {
+    flexGrow: 1,
   },
-  nome: {
-    fontSize: 16,
-    fontWeight: '600',
+  emptyContainer: {
+    marginTop: 40,
+    alignItems: 'center',
   },
-  sub: {
-    color: '#666',
-    marginTop: 4,
-  },
+  emptyTexto: {
+    textAlign: 'center',
+  }
 });

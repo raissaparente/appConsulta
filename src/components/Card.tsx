@@ -11,8 +11,6 @@ export default function Card({ title }: { title: string }) {
 const styles = StyleSheet.create({
   card: {
     padding: 16,
-    borderRadius: 12,
-    backgroundColor: '#eee',
     margin: 10,
   },
 });

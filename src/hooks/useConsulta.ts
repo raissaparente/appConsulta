@@ -1,28 +1,48 @@
 import { useEffect, useState } from 'react';
 
-import { getConsultasDoPaciente } from '../services/consultaService';
+import { getConsultaById } from '../services/consultaService';
+import { getMedicoById } from '../services/medicoService';
+import { Consulta } from '../models/Consulta';
+import { Medico } from '../models/Medico';
 
-export function useConsulta(pacienteId: string) {
-  const [consultas, setConsultas] = useState<any[]>([]);
+/**
+ * Hook customizado para buscar os detalhes de uma consulta específica
+ * e também os dados do médico associado a ela.
+ */
+export function useConsulta(consultaId: string) {
+  // Estados para armazenar os dados carregados e o status de carregamento
+  const [consulta, setConsulta] = useState<Consulta | null>(null);
+  const [medico, setMedico] = useState<Medico | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function carregarConsultas() {
+    async function carregarConsulta() {
       try {
-        const dados = await getConsultasDoPaciente(pacienteId);
-        setConsultas(dados);
+        // 1. Busca os dados principais da consulta no Firebase
+        const dadosConsulta = await getConsultaById(consultaId);
+        setConsulta(dadosConsulta);
+
+        // 2. Se a consulta existir e tiver um médico vinculado, busca os dados do médico
+        if (dadosConsulta && dadosConsulta.medicoId) {
+          const dadosMedico = await getMedicoById(dadosConsulta.medicoId);
+          setMedico(dadosMedico);
+        }
       } catch (error) {
-        console.log('Erro ao buscar consultas:', error);
+        console.log('Erro ao buscar consulta:', error);
       } finally {
+        // Conclui o carregamento independentemente de dar erro ou sucesso
         setLoading(false);
       }
     }
 
-    carregarConsultas();
-  }, [pacienteId]);
+    if (consultaId) {
+      carregarConsulta();
+    }
+  }, [consultaId]); // O hook re-executa se o consultaId mudar
 
   return {
-    consultas,
+    consulta,
+    medico,
     loading,
   };
 }

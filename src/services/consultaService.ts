@@ -3,6 +3,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
   updateDoc,
@@ -30,6 +31,22 @@ export async function getConsultasDoPaciente(
 })) as Consulta[];
 }
 
+export async function getConsultaById(
+  consultaId: string
+) {
+  const consultaRef = doc(db, 'consultas', consultaId);
+  const snapshot = await getDoc(consultaRef);
+
+  if (!snapshot.exists()) {
+    return null;
+  }
+
+  return {
+    id: snapshot.id,
+    ...snapshot.data(),
+  } as Consulta;
+}
+
 export async function getConsultasDoMedico(
   medicoId: string
 ) {
@@ -46,6 +63,16 @@ export async function getConsultasDoMedico(
   id: doc.id,
   ...doc.data(),
 })) as Consulta[];
+}
+
+export async function getTodasConsultas() {
+  const consultasRef = collection(db, 'consultas');
+  const snapshot = await getDocs(consultasRef);
+  
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Consulta[];
 }
 
 export async function criarConsulta(

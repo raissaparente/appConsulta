@@ -1,9 +1,45 @@
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { useEffect } from 'react';
+import { useRouter } from 'expo-router';
 
 export default function TelaSucesso() {
+  const roteador = useRouter();
+
+  // Redireciona automaticamente após 3 segundos
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // replace garante que o usuário não consiga voltar pra tela de sucesso usando o botão de voltar
+      roteador.replace('/(abas)/home');
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <View>
-      <Text>Consulta marcada com sucesso!</Text>
+    <View style={styles.container}>
+      <Text style={styles.titulo}>
+        Consulta marcada com sucesso!
+      </Text>
+      <Text style={styles.subtitulo}>
+        Redirecionando para a home...
+      </Text>
     </View>
   );
 }
+
+//BRUNO: ESTILIZAR AQUI (estilos globais dessa tela)
+const styles = StyleSheet.create({
+  container: {
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    padding: 16
+  },
+  titulo: {
+    fontSize: 24, 
+    textAlign: 'center', 
+  },
+  subtitulo: {
+    marginTop: 16, 
+  }
+});

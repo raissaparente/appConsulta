@@ -3,6 +3,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  updateDoc
 } from 'firebase/firestore';
 
 import { Paciente } from '../models/Paciente';
@@ -43,4 +44,17 @@ export async function getPacientes() {
     id: doc.id,
     ...doc.data(),
   })) as Paciente[];
+}
+
+export async function atualizarPaciente(
+  pacienteId: string,
+  dados: Partial<Omit<Paciente, 'id'>>
+) {
+  try {
+    const pacienteRef = doc(db, 'pacientes', pacienteId);
+    await updateDoc(pacienteRef, dados);
+  } catch (error) {
+    console.log('Erro ao atualizar paciente:', error);
+    throw error;
+  }
 }
