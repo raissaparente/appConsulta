@@ -36,7 +36,7 @@ export default function TelaPaciente() {
               key={c.id}
               style={[
                 styles.cardConsulta,
-                { borderLeftColor: c.status === 'concluída' ? '#4caf50' : '#2196f3' }
+                { borderLeftColor: c.status === 'realizada' ? '#4caf50' : '#2196f3' }
               ]}
               onPress={() => roteador.push(`/consulta/${c.id}`)}
             >
