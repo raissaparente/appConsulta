@@ -3,9 +3,13 @@ import { Pressable, Text, StyleSheet } from 'react-native';
 type Props = {
   titulo: string;
   onPress: () => void;
-  style?: object;
+  style?: object; // Permite sobrescrever os estilos padrão de fora
 };
 
+/**
+ * Componente base de botão reutilizável.
+ * Centraliza o design principal de botões de ação na aplicação inteira.
+ */
 export default function BotaoPrincipal({ titulo, onPress, style }: Props) {
   return (
     <Pressable style={[styles.botao, style]} onPress={onPress}>

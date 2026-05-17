@@ -7,6 +7,10 @@ type Props = {
   onPress: () => void;
 };
 
+/**
+ * Componente que exibe de forma resumida os dados de um paciente em listas,
+ * com um ícone chevron indicando que ele é clicável para ir aos detalhes.
+ */
 export default function CardPacienteLista({ paciente, onPress }: Props) {
   return (
     <Pressable style={styles.card} onPress={onPress}>

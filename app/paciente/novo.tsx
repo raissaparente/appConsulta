@@ -7,9 +7,15 @@ import { getPacienteById, atualizarPaciente } from '../../src/services/pacienteS
 
 import BotaoPrincipal from '../../src/components/BotaoPrincipal';
 
+/**
+ * Tela de formulário responsável tanto pela CRIACÃO de um novo paciente
+ * quanto pela EDICÃO de um paciente existente.
+ * A decisão é tomada baseada na existência do parâmetro `id` na rota.
+ */
 export default function TelaNovoPaciente() {
   const roteador = useRouter();
   const params = useLocalSearchParams();
+  // Se o id foi passado na URL, significa que estamos no modo de edição
   const isEdicao = !!params.id;
 
   const [nome, setNome] = useState('');

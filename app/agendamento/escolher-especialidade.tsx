@@ -5,6 +5,11 @@ import { useEffect, useState } from 'react';
 // importamos a função que acabamos de criar pra pegar todos os médicos
 import { getMedicos } from '../../src/services/medicoService';
 
+/**
+ * Primeira etapa do fluxo de agendamento de consultas.
+ * Permite que o usuário selecione a especialidade desejada para, em seguida,
+ * escolher o médico correspondente.
+ */
 export default function TelaEscolherEspecialidade() {
   const roteador = useRouter();
   // o pacienteId, nome e cpf vêm da url (quando clicamos no botão de nova consulta na tela do paciente)

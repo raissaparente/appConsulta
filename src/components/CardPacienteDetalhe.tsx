@@ -6,6 +6,10 @@ type Props = {
   onEditPress: () => void;
 };
 
+/**
+ * Card para exibir os detalhes primordiais de um paciente,
+ * utilizado na tela de Perfil do Paciente. Inclui um botão para acionar a edição.
+ */
 export default function CardPacienteDetalhe({ paciente, onEditPress }: Props) {
   return (
     <View style={styles.cardPaciente}>

@@ -7,8 +7,14 @@ import { bloquearHorario } from '../../src/services/horarioService';
 
 import BotaoPrincipal from '../../src/components/BotaoPrincipal';
 
+/**
+ * Última etapa do fluxo de agendamento.
+ * Revisa todos os dados coletados nas etapas anteriores via URL (params)
+ * e finaliza gravando a consulta no banco de dados.
+ */
 export default function TelaConfirmarAgendamento() {
   const roteador = useRouter();
+  // params carrega todo o histórico do agendamento (paciente, médico, hora)
   const params = useLocalSearchParams();
 
   const [loading, setLoading] = useState(false);

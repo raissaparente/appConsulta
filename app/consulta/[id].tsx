@@ -4,23 +4,30 @@ import { useConsulta } from '../../src/hooks/useConsulta';
 import BotaoPrincipal from '../../src/components/BotaoPrincipal';
 import { atualizarStatusConsulta } from '../../src/services/consultaService';
 
+/**
+ * Tela que exibe as informações completas de uma consulta.
+ * Permite marcar um retorno ou concluir a consulta dependendo do seu status atual.
+ */
 export default function TelaConsulta() {
   const { id } = useLocalSearchParams();
   const roteador = useRouter();
 
+  // Busca a consulta a partir do ID que vem na URL da rota
   const { consulta, medico } = useConsulta(String(id));
 
   if (!consulta) return <Text style={styles.loading}>consulta não encontrada</Text>;
 
+  // Quebra a string ISO em Data e Hora para exibir bonitinho
   const [data, hora] = consulta.dataHora.split('T');
   const dataFmt = data.split('-').reverse().join('/');
   const horaFmt = hora.slice(0, 5);
 
+  // Função para marcar a consulta como finalizada no Firebase
   async function concluirConsulta() {
     try {
       await atualizarStatusConsulta(String(id), 'realizada');
       Alert.alert('Sucesso', 'Consulta marcada como concluída!');
-      roteador.back();
+      roteador.back(); // Volta pra tela anterior
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível concluir a consulta.');
     }
