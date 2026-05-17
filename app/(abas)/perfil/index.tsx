@@ -128,7 +128,7 @@ export default function TelaPerfil() {
   );
 }
 
-// Estilos globais dessa tela pro seu colega alterar depois
+//BRUNO: ESTILIZAR AQUI (estilos globais dessa tela)
 const styles = StyleSheet.create({
   container: {
     padding: 16

@@ -44,7 +44,7 @@ export default function TelaAlterarSenha() {
   );
 }
 
-// Estilos globais dessa tela pro seu colega alterar depois
+//BRUNO: ESTILIZAR AQUI (estilos globais dessa tela)
 const styles = StyleSheet.create({
   container: {
     flex: 1, 

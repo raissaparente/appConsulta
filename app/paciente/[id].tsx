@@ -14,13 +14,13 @@ export default function TelaPaciente() {
     <ScrollView style={styles.container}>
       {/* CARD DE DADOS DO PACIENTE */}
       <View style={styles.cardPaciente}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <View style={styles.headerCard}>
           <Text style={styles.nomePaciente}>{paciente?.nome}</Text>
           <Pressable 
             onPress={() => roteador.push(`/paciente/novo?id=${id}`)}
-            style={{ padding: 8, backgroundColor: '#eee', borderRadius: 4 }}
+            style={styles.botaoEditar}
           >
-            <Text style={{ color: '#333', fontWeight: 'bold' }}>Editar</Text>
+            <Text style={styles.textoBotaoEditar}>Editar</Text>
           </Pressable>
         </View>
         <Text style={styles.subtextoPaciente}>CPF: {paciente?.cpf}</Text>
@@ -69,7 +69,7 @@ export default function TelaPaciente() {
   );
 }
 
-// Estilos globais dessa tela pro seu colega alterar depois
+//BRUNO: ESTILIZAR AQUI (estilos globais dessa tela)
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
@@ -84,6 +84,21 @@ const styles = StyleSheet.create({
     borderRadius: 12, 
     marginBottom: 24, 
     elevation: 2
+  },
+  headerCard: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    marginBottom: 8
+  },
+  botaoEditar: {
+    padding: 8, 
+    backgroundColor: '#eee', 
+    borderRadius: 4
+  },
+  textoBotaoEditar: {
+    color: '#333', 
+    fontWeight: 'bold'
   },
   nomePaciente: {
     fontSize: 22, 

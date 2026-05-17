@@ -1,41 +1,37 @@
-import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import CardConsulta from '../../../src/components/CardConsulta';
-// esse hook aqui já tá pegando os dados reais do firebase lá do banco!
+//hook do firebase
 import { useConsultasHoje } from '../../../src/hooks/useConsultasHoje';
 
 export default function TelaInicio() {
-  // consultasHoje é o nosso array com os dados que vieram do banco
-  const { consultasHoje } = useConsultasHoje();
-  // useRouter serve pra gente navegar entre as telas
-  const roteador = useRouter();
+  const { consultasHoje } = useConsultasHoje(); //array de consultas do db
+  const roteador = useRouter(); //navegação
 
   return (
-    // a view principal precisa flex: 1 pra ocupar a tela toda
     <View style={styles.container}>
       <Text style={styles.titulo}>
         Consultas de hoje
       </Text>
 
-      {/* flatlist é a lista otimizada do react native. 
-          ela recebe nossos dados do firebase aqui no 'data' */}
+      { }
       <FlatList
         data={consultasHoje}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          // esse é o componente que você vai focar em estilizar depois
+          //BRUNO: ESTILIZAR ESSE CARD
           <CardConsulta
             pacienteNome={item.pacienteNome}
             medicoNome={item.medicoNome}
             dataHora={item.dataHora}
             onPress={() =>
-              // quando clica no card, a gente manda o usuário pra tela de detalhes com o id da consulta
+              //nav pro detalhe da consulta
               roteador.push(`/consulta/${item.id}`)
             }
           />
         )}
-        // isso aqui é o que aparece se o firebase retornar vazio
+        //empty state se n tiver nada pra hj:
         ListEmptyComponent={
           <Text style={styles.textoVazio}>Nenhuma consulta hoje</Text>
         }
@@ -44,10 +40,10 @@ export default function TelaInicio() {
   );
 }
 
-// Estilos globais dessa tela pro seu colega alterar depois
+//BRUNO:estilos globais dessa tela pra alterar depois
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
+    flex: 1, //pra ocupar toda a tela
     padding: 16
   },
   titulo: {
