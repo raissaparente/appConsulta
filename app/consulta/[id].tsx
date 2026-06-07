@@ -1,7 +1,7 @@
-import { View, Text, Alert, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useConsulta } from '../../src/hooks/useConsulta';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import BotaoPrincipal from '../../src/components/BotaoPrincipal';
+import { useConsulta } from '../../src/hooks/useConsulta';
 import { atualizarStatusConsulta } from '../../src/services/consultaService';
 
 /**
@@ -41,18 +41,13 @@ export default function TelaConsulta() {
         <Text style={styles.label}>Data</Text>
         <Text style={styles.valor}>{dataFmt}</Text>
 
-        <View style={styles.divisor} />
-
         <Text style={styles.label}>Horário</Text>
         <Text style={styles.valor}>{horaFmt}</Text>
 
-        <View style={styles.divisor} />
-
         <Text style={styles.label}>Médico</Text>
         <Text style={styles.valor}>{medico?.nome}</Text>
+        <Text style={styles.label}>Especialidade</Text>
         <Text style={styles.subValor}>{medico?.especialidade}</Text>
-        
-        <View style={styles.divisor} />
         
         <Text style={styles.label}>Status</Text>
         <Text style={styles.valorStatus}>{consulta.status}</Text>
@@ -89,8 +84,13 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 22,
-    marginBottom: 20,
-    textAlign: 'center'
+    marginBottom: 18,
+    borderBottomWidth: 1,
+    borderRadius: 6 ,
+    borderColor:'#898989',
+    textAlign: 'left',
+    color:'#0F14A5',
+    fontWeight: 'bold'
   },
   cardInfo: {
     backgroundColor: '#fff',
@@ -98,22 +98,30 @@ const styles = StyleSheet.create({
     marginBottom: 32
   },
   label: {
+    padding: 2,
     fontSize: 14,
-    marginBottom: 4
+    marginBottom: 12,
+    color:'#0F14A5',
+    fontWeight: '600',
+    borderBottomWidth: 1 ,
+    borderColor: '#898989',
   },
   valor: {
+    padding: 2,
     fontSize: 18,
+    marginBottom: 12,
+    fontWeight: 'bold'
   },
   subValor: {
-    fontSize: 14,
-    marginTop: 2
+    fontSize: 18,
+    marginBottom: 12,
+    fontWeight: 'bold',
+    padding: 2,
   },
   valorStatus: {
-    fontSize: 16,
-  },
-  divisor: {
-    height: 1,
-    marginVertical: 16
+    fontSize: 18,
+    fontWeight: 'bold',
+    padding: 2
   },
   botaoSecundario: {
     marginTop: -24 

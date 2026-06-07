@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 type Props = {
   pacienteNome: string;
@@ -45,18 +45,31 @@ const styles = StyleSheet.create({
 
   },
   hora: {
-    fontSize: 18,
+    fontSize: 20,
+    color:'#0F52BA',
+    fontWeight:'bold',
+    borderRightWidth: 1,
+    paddingRight: 5,
+    borderColor: '#898989'
   },
   conteudo: {
     flex: 1,
+    borderBottomWidth: 1,
+    borderColor:'#898989',
+    paddingBottom: 6,
   },
   paciente: {
     fontSize: 16,
+    fontWeight: 'bold'
   },
   medico: {
+    fontWeight: 'bold',
+    color:'#0F52BA'
   },
   tipo: {
     fontSize: 12,
     marginTop: 4,
+    fontWeight: 'bold',
+    color: '#111184'
   }
 });

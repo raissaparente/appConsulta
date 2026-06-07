@@ -12,28 +12,26 @@ export default function TelaInicio() {
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>
-        Consultas de hoje
+        Consultas
       </Text>
-
+      <Text style={styles.titulo2}>
+        Agenda de Hoje
+      </Text>
       { }
       <FlatList
+        contentContainerStyle={styles.cardconsulta}
         data={consultasHoje}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          //BRUNO: ESTILIZAR ESSE CARD
           <CardConsulta
             pacienteNome={item.pacienteNome}
             medicoNome={item.medicoNome}
             dataHora={item.dataHora}
             tipo={item.tipo}
             especialidadeMedico={item.especialidadeMedico}
-            onPress={() =>
-              //nav pro detalhe da consulta
-              roteador.push(`/consulta/${item.id}`)
-            }
+            onPress={() => roteador.push(`/consulta/${item.id}`)}
           />
         )}
-        //empty state se n tiver nada pra hj:
         ListEmptyComponent={
           <Text style={styles.textoVazio}>Nenhuma consulta hoje</Text>
         }
@@ -50,10 +48,27 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 22,
+    marginBottom: 6,
+    marginTop: 10,
+    fontWeight: 'bold'
+  },
+  titulo2: {
+    color: '#0F52BA',
+    fontWeight: 'bold',
     marginBottom: 16,
+    fontSize: 16,
+    borderBottomWidth: 2,
+    borderColor: '#898989',
+    paddingBottom: 8
   },
   textoVazio: {
     textAlign: 'center',
-    marginTop: 20
+    marginTop: 20,
+    color: '#0F52BA',
+    fontWeight: 'bold'
+  },
+  cardconsulta: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
   }
 });
