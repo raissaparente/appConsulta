@@ -21,6 +21,7 @@ export default function TelaNovoPaciente() {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [carregandoDados, setCarregandoDados] = useState(isEdicao);
 
@@ -33,6 +34,7 @@ export default function TelaNovoPaciente() {
           setNome(paciente.nome);
           setCpf(paciente.cpf);
           setDataNascimento(paciente.dataNascimento || '');
+          setEmail(paciente.email || '');
         }
       } catch (error) {
         console.log('Erro ao carregar paciente para edição:', error);
@@ -55,7 +57,8 @@ export default function TelaNovoPaciente() {
         await atualizarPaciente(String(params.id), {
           nome,
           cpf,
-          dataNascimento
+          dataNascimento,
+          email,
         });
         Alert.alert('Sucesso', 'Paciente atualizado com sucesso!');
         roteador.back(); // Volta pra tela de detalhes
@@ -64,6 +67,7 @@ export default function TelaNovoPaciente() {
           nome,
           cpf,
           dataNascimento,
+          email,
           criadoEm: new Date().toISOString()
         });
 
@@ -112,11 +116,21 @@ export default function TelaNovoPaciente() {
 
       <Text style={styles.label}>Data de Nascimento</Text>
       <TextInput
-        style={[styles.input, { marginBottom: 32 }]}
+        style={styles.input}
         placeholder="DD/MM/AAAA"
         keyboardType="numeric"
         value={dataNascimento}
         onChangeText={setDataNascimento}
+      />
+
+      <Text style={styles.label}>E-mail</Text>
+      <TextInput
+        style={[styles.input, { marginBottom: 32 }]}
+        placeholder="paciente@email.com"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
       />
 
       <BotaoPrincipal 

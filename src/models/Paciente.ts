@@ -7,4 +7,5 @@ export interface Paciente {
   endereco: string;
   cep: string;
   telefone?: string;
+  email?: string;
 }

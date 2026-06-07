@@ -109,11 +109,27 @@ export default function TelaEscolherHorario() {
           return (
             <Pressable
               style={styles.horarioBotao}
-              onPress={() =>
-                roteador.push(
-                  `/agendamento/confirmar?horarioId=${item.id}&dataHora=${item.dataHora}&medicoId=${item.medicoId}&pacienteId=${params.pacienteId}`
-                )
-              }
+              onPress={() => {
+                const queryParams = new URLSearchParams({
+                  horarioId: item.id,
+                  dataHora: item.dataHora,
+                  medicoId: item.medicoId,
+                  pacienteId: String(params.pacienteId || ''),
+                  pacienteNome: String(params.pacienteNome || ''),
+                  pacienteCpf: String(params.pacienteCpf || ''),
+                  medicoNome: String(params.medicoNome || ''),
+                  especialidade: String(params.especialidade || ''),
+                });
+
+                if (params.retorno === 'true') {
+                  queryParams.append('retorno', 'true');
+                }
+                if (params.remarcarId) {
+                  queryParams.append('remarcarId', String(params.remarcarId));
+                }
+
+                roteador.push(`/agendamento/confirmar?${queryParams.toString()}`);
+              }}
             >
               <Text style={styles.horarioTexto}>{horaString}</Text>
             </Pressable>

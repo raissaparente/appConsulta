@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 
 import { getConsultaById } from '../services/consultaService';
 import { getMedicoById } from '../services/medicoService';
+import { getPacienteById } from '../services/pacienteService';
 import { Consulta } from '../models/Consulta';
 import { Medico } from '../models/Medico';
+import { Paciente } from '../models/Paciente';
 
 /**
  * Hook customizado para buscar os detalhes de uma consulta específica
@@ -13,6 +15,7 @@ export function useConsulta(consultaId: string) {
   // Estados para armazenar os dados carregados e o status de carregamento
   const [consulta, setConsulta] = useState<Consulta | null>(null);
   const [medico, setMedico] = useState<Medico | null>(null);
+  const [paciente, setPaciente] = useState<Paciente | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,6 +29,12 @@ export function useConsulta(consultaId: string) {
         if (dadosConsulta && dadosConsulta.medicoId) {
           const dadosMedico = await getMedicoById(dadosConsulta.medicoId);
           setMedico(dadosMedico);
+        }
+
+        // 3. Se a consulta existir e tiver um paciente vinculado, busca os dados do paciente
+        if (dadosConsulta && dadosConsulta.pacienteId) {
+          const dadosPaciente = await getPacienteById(dadosConsulta.pacienteId);
+          setPaciente(dadosPaciente);
         }
       } catch (error) {
         console.log('Erro ao buscar consulta:', error);
@@ -43,6 +52,7 @@ export function useConsulta(consultaId: string) {
   return {
     consulta,
     medico,
+    paciente,
     loading,
   };
 }

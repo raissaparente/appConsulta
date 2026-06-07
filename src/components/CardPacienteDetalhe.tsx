@@ -21,6 +21,7 @@ export default function CardPacienteDetalhe({ paciente, onEditPress }: Props) {
       </View>
       <Text style={styles.subtextoPaciente}>CPF: {paciente?.cpf}</Text>
       <Text style={styles.subtextoPaciente}>Nascimento: {paciente?.dataNascimento || 'Não informado'}</Text>
+      {paciente?.email && <Text style={styles.subtextoPaciente}>E-mail: {paciente?.email}</Text>}
     </View>
   );
 }

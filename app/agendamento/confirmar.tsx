@@ -1,9 +1,11 @@
 import { View, Text, Alert, StyleSheet } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../src/services/firebase';
 import { useState } from 'react';
 import { bloquearHorario } from '../../src/services/horarioService';
+import { getPacienteById } from '../../src/services/pacienteService';
+import { enviarEmailConsulta } from '../../src/services/emailService';
 
 import BotaoPrincipal from '../../src/components/BotaoPrincipal';
 
@@ -28,6 +30,8 @@ export default function TelaConfirmarAgendamento() {
   const pacienteCpf = String(params.pacienteCpf);
   const especialidade = String(params.especialidade);
   const medicoNome = String(params.medicoNome);
+  const isRetorno = params.retorno === 'true';
+  const remarcarId = params.remarcarId ? String(params.remarcarId) : null;
 
   // formata a data ("2026-05-15T14:30") pra ficar legível pro usuário
   const dataParte = dataHora.split('T')[0];
@@ -43,17 +47,41 @@ export default function TelaConfirmarAgendamento() {
     setLoading(true);
 
     try {
-      // 1. cria a consulta no banco com status 'agendada'
-      await addDoc(collection(db, 'consultas'), {
-        pacienteId,
-        medicoId,
-        dataHora,
-        status: 'agendada',
-        tipo: 'primeira' // depois podemos fazer lógica pra saber se é retorno
-      });
+      if (remarcarId) {
+        // 1. Atualiza a consulta no banco com a nova data/hora e reseta status para 'agendada'
+        const consultaRef = doc(db, 'consultas', remarcarId);
+        await updateDoc(consultaRef, {
+          dataHora,
+          status: 'agendada'
+        });
+      } else {
+        // 1. Cria a consulta no banco com status 'agendada'
+        await addDoc(collection(db, 'consultas'), {
+          pacienteId,
+          medicoId,
+          dataHora,
+          status: 'agendada',
+          tipo: isRetorno ? 'retorno' : 'primeira'
+        });
+      }
 
-      // 2. bloqueia o horário para ninguém mais pegar
+      // 2. Bloqueia o horário para ninguém mais pegar
       await bloquearHorario(horarioId);
+
+      // 3. Busca o e-mail do paciente para enviar a notificação correspondente
+      const paciente = await getPacienteById(pacienteId);
+      const pacienteEmail = paciente?.email;
+
+      // 4. Envia o e-mail de confirmação ou reagendamento
+      const tipoNotificacao = remarcarId ? 'remarcada' : (isRetorno ? 'retorno' : 'marcada');
+      await enviarEmailConsulta({
+        pacienteNome,
+        pacienteEmail,
+        medicoNome,
+        especialidade,
+        dataHora,
+        tipo: tipoNotificacao
+      });
 
       // manda pra tela de sucesso
       roteador.push('/agendamento/sucesso');

@@ -3,6 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useConsulta } from '../../src/hooks/useConsulta';
 import BotaoPrincipal from '../../src/components/BotaoPrincipal';
 import { atualizarStatusConsulta } from '../../src/services/consultaService';
+import { enviarEmailConsulta } from '../../src/services/emailService';
 
 /**
  * Tela que exibe as informações completas de uma consulta.
@@ -13,7 +14,7 @@ export default function TelaConsulta() {
   const roteador = useRouter();
 
   // Busca a consulta a partir do ID que vem na URL da rota
-  const { consulta, medico } = useConsulta(String(id));
+  const { consulta, medico, paciente } = useConsulta(String(id));
 
   if (!consulta) return <Text style={styles.loading}>consulta não encontrada</Text>;
 
@@ -33,11 +34,45 @@ export default function TelaConsulta() {
     }
   }
 
+  // Função para cancelar a consulta no Firebase e disparar e-mail
+  async function cancelarConsulta() {
+    if (!consulta) return;
+    try {
+      await atualizarStatusConsulta(String(id), 'cancelada');
+      
+      // Envia notificação por e-mail se houver paciente e médico cadastrados
+      if (paciente && medico) {
+        await enviarEmailConsulta({
+          pacienteNome: paciente.nome,
+          pacienteEmail: paciente.email,
+          medicoNome: medico.nome,
+          especialidade: medico.especialidade,
+          dataHora: consulta.dataHora,
+          tipo: 'cancelada'
+        });
+      }
+
+      Alert.alert('Sucesso', 'Consulta cancelada com sucesso!');
+      roteador.back();
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível cancelar a consulta.');
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Detalhes da Consulta</Text>
       
       <View style={styles.cardInfo}>
+        {paciente && (
+          <>
+            <Text style={styles.label}>Paciente</Text>
+            <Text style={styles.valor}>{paciente.nome}</Text>
+            {paciente.email && <Text style={styles.subValor}>{paciente.email}</Text>}
+            <View style={styles.divisor} />
+          </>
+        )}
+
         <Text style={styles.label}>Data</Text>
         <Text style={styles.valor}>{dataFmt}</Text>
 
@@ -58,20 +93,48 @@ export default function TelaConsulta() {
         <Text style={styles.valorStatus}>{consulta.status}</Text>
       </View>
 
-      <BotaoPrincipal
-        titulo="Marcar retorno"
-        onPress={() =>
-          roteador.push(
-            `/agendamento/escolher-horario?retorno=true&medicoId=${consulta.medicoId}&pacienteId=${consulta.pacienteId}`
-          )
-        }
-      />
-
-      {consulta.status !== 'realizada' && (
+      {consulta.status === 'realizada' && (
         <BotaoPrincipal
-          titulo="Consulta Concluída"
-          onPress={concluirConsulta}
-          style={styles.botaoSecundario}
+          titulo="Marcar retorno"
+          onPress={() =>
+            roteador.push(
+              `/agendamento/escolher-horario?retorno=true&medicoId=${consulta.medicoId}&pacienteId=${consulta.pacienteId}&pacienteNome=${paciente?.nome}&pacienteCpf=${paciente?.cpf}&medicoNome=${medico?.nome}&especialidade=${medico?.especialidade}`
+            )
+          }
+        />
+      )}
+
+      {consulta.status === 'agendada' && (
+        <>
+          <BotaoPrincipal
+            titulo="Consulta Concluída"
+            onPress={concluirConsulta}
+          />
+          <BotaoPrincipal
+            titulo="Remarcar Consulta"
+            onPress={() =>
+              roteador.push(
+                `/agendamento/escolher-horario?remarcarId=${consulta.id}&medicoId=${consulta.medicoId}&pacienteId=${consulta.pacienteId}&pacienteNome=${paciente?.nome}&pacienteCpf=${paciente?.cpf}&medicoNome=${medico?.nome}&especialidade=${medico?.especialidade}`
+              )
+            }
+            style={styles.botaoRemarcar}
+          />
+          <BotaoPrincipal
+            titulo="Cancelar Consulta"
+            onPress={cancelarConsulta}
+            style={styles.botaoCancelar}
+          />
+        </>
+      )}
+
+      {consulta.status === 'cancelada' && (
+        <BotaoPrincipal
+          titulo="Remarcar Consulta"
+          onPress={() =>
+            roteador.push(
+              `/agendamento/escolher-horario?remarcarId=${consulta.id}&medicoId=${consulta.medicoId}&pacienteId=${consulta.pacienteId}&pacienteNome=${paciente?.nome}&pacienteCpf=${paciente?.cpf}&medicoNome=${medico?.nome}&especialidade=${medico?.especialidade}`
+            )
+          }
         />
       )}
     </View>
@@ -106,7 +169,8 @@ const styles = StyleSheet.create({
   },
   subValor: {
     fontSize: 14,
-    marginTop: 2
+    marginTop: 2,
+    color: '#666'
   },
   valorStatus: {
     fontSize: 16,
@@ -115,7 +179,12 @@ const styles = StyleSheet.create({
     height: 1,
     marginVertical: 16
   },
-  botaoSecundario: {
-    marginTop: -24 
+  botaoRemarcar: {
+    marginTop: -28,
+    backgroundColor: '#f5f5f5'
+  },
+  botaoCancelar: {
+    marginTop: -28,
+    backgroundColor: '#ffe3e3'
   }
 });
