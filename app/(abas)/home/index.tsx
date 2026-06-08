@@ -15,7 +15,7 @@ export default function TelaInicio() {
         Consultas
       </Text>
       <Text style={styles.titulo2}>
-        Agenda de Hoje
+        AGENDA DO DIA
       </Text>
       { }
       <FlatList
@@ -43,23 +43,27 @@ export default function TelaInicio() {
 //BRUNO:estilos globais dessa tela pra alterar depois
 const styles = StyleSheet.create({
   container: {
-    flex: 1, //pra ocupar toda a tela
-    padding: 16
+    flex: 1,
+    backgroundColor: '#F3F4F6',
+    paddingHorizontal: 20,
+    paddingTop: 10,
   },
   titulo: {
-    fontSize: 22,
-    marginBottom: 6,
-    marginTop: 10,
-    fontWeight: 'bold'
+    fontSize: 24,
+    marginBottom: 2,
+    marginTop: 2,
+    fontWeight: 'bold',
+    color: '#0F2042'
   },
   titulo2: {
-    color: '#0F52BA',
-    fontWeight: 'bold',
-    marginBottom: 16,
-    fontSize: 16,
-    borderBottomWidth: 2,
-    borderColor: '#898989',
-    paddingBottom: 8
+    fontSize: 12, 
+    color: '#200C83',
+    marginBottom: 20, 
+    borderBottomWidth: 1,
+    paddingbottom: 5,
+    borderColor: '#7A869A',
+    fontWeight: '800',
+    letterSpacing: 0.5,
   },
   textoVazio: {
     textAlign: 'center',
