@@ -55,7 +55,6 @@ export default function TelaConsulta() {
         <Text style={styles.label}>HORÁRIO</Text>
         <Text style={styles.valor}>{horaFmt}</Text>       
       </View>
-
 {consulta.status !== 'realizada' && (
         <BotaoPrincipal
           titulo="Consulta Concluída"
