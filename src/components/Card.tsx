@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-export default function Card({ title }: { title: string }) {
+export default function Card({ title, subtitle }: { title: string, subtitle: string }) {
   return (
     <View style={styles.card}>
       <Text>{title}</Text>
+      <Text>{subtitle}</Text>
     </View>
   );
 }

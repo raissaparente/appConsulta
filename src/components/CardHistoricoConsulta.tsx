@@ -1,4 +1,4 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ConsultaPaciente } from '../hooks/usePaciente';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 export default function CardHistoricoConsulta({ consulta, onPress }: Props) {
   const [data, hora] = consulta.dataHora.split('T');
   const dataFmt = data.split('-').reverse().join('/');
-  
+
   return (
     <Pressable
       style={[
@@ -19,12 +19,11 @@ export default function CardHistoricoConsulta({ consulta, onPress }: Props) {
       onPress={onPress}
     >
       <View style={styles.consultaHeader}>
-        <Text style={styles.consultaDataHora}>{dataFmt} às {hora}</Text>
-        <Text style={styles.consultaStatus}>{consulta.status}</Text>
+        <Text style={styles.consultaMedico}>
+          {consulta.medicoNome} {consulta.especialidadeMedico ? `• ${consulta.especialidadeMedico}` : ''}
+        </Text>
       </View>
-      <Text style={styles.consultaMedico}>
-        {consulta.medicoNome} {consulta.especialidadeMedico ? `• ${consulta.especialidadeMedico}` : ''}
-      </Text>
+      <Text style={styles.consultaStatus}>{dataFmt} às {hora} {consulta.status}</Text>
     </Pressable>
   );
 }
@@ -33,18 +32,22 @@ export default function CardHistoricoConsulta({ consulta, onPress }: Props) {
 const styles = StyleSheet.create({
   cardConsulta: {
     backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#C9C9C9',
     padding: 16,
     marginBottom: 12,
   },
   consultaHeader: {
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 4
   },
   consultaDataHora: {
-    fontSize: 16
+    fontSize: 16,
   },
   consultaStatus: {
+    color: '#1E5393'
   },
   consultaMedico: {
     fontSize: 14,

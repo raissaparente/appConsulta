@@ -1,5 +1,5 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Paciente } from '../models/Paciente';
 
 type Props = {
@@ -16,8 +16,8 @@ export default function CardPacienteLista({ paciente, onPress }: Props) {
     <Pressable style={styles.card} onPress={onPress}>
       <View style={styles.conteudo}>
         <Text style={styles.nome}>{paciente.nome}</Text>
-        <Text style={styles.subtexto}>CPF: {paciente.cpf}</Text>
-        <Text style={styles.subtexto}>Nasc: {paciente.dataNascimento || 'Não informado'}</Text>
+        <Text style={styles.cpf}>CPF                                          {paciente.cpf}</Text>
+        <Text style={styles.dt}>Data de Nascimento                      {paciente.dataNascimento || 'Não informado'}</Text>
       </View>
       
       <Ionicons name="chevron-forward" size={24} color="#ccc" />
@@ -29,6 +29,9 @@ export default function CardPacienteLista({ paciente, onPress }: Props) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
+    borderColor: '#C9C9C9',
+    borderWidth: 1,
+    borderRadius: 8,
     padding: 14,
     marginBottom: 10,
     flexDirection: 'row',
@@ -42,8 +45,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 4,
   },
-  subtexto: {
+  cpf: {
     fontSize: 14,
-    marginTop: 2,
+    marginTop: 8,
+    paddingVertical: 1,
+    color: '#1E5393',
+    borderBottomWidth: 1,
+    borderColor: '#C9C9C9',
+    fontWeight: 'bold',
+    borderRadius: 8
+  },
+  dt:{
+    fontSize: 14,
+    marginTop: 8,
+    paddingVertical: 1,
+    color: '#1E5393',
+    fontWeight: 'bold',
   }
 });

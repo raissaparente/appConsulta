@@ -1,4 +1,5 @@
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import Card from '@/src/components/Card';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { addDoc, collection } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
@@ -20,6 +21,7 @@ export default function TelaNovoPaciente() {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
+  const [telefone, setTelefone] = useState('');
   const [loading, setLoading] = useState(false);
   const [carregandoDados, setCarregandoDados] = useState(isEdicao);
 
@@ -87,10 +89,13 @@ export default function TelaNovoPaciente() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: isEdicao ? 'Editar Paciente' : 'Novo Paciente' }} />
-      <Text style={styles.titulo}>
-        {isEdicao ? 'Editar Paciente' : 'Novo Paciente'}
-      </Text>
+
+        <Card
+          title='Informações básicas'
+          subtitle='Preencha os dados cadastrais do paciente para registro clínico institucional'
+        >
+        </Card>
+      
 
       <Text style={styles.label}>Nome Completo</Text>
       <TextInput
@@ -111,15 +116,23 @@ export default function TelaNovoPaciente() {
 
       <Text style={styles.label}>Data de Nascimento</Text>
       <TextInput
-        style={[styles.input, { marginBottom: 32 }]}
+        style={[styles.input]}
         placeholder="DD/MM/AAAA"
         keyboardType="numeric"
         value={dataNascimento}
         onChangeText={setDataNascimento}
       />
-      <BotaoPrincipal 
+      <Text style={styles.label}>Telefone</Text>
+      <TextInput
+      style={[styles.input]}
+      placeholder='(00) 00000-0000'
+      keyboardType='phone-pad'
+      value={telefone}
+      onChangeText={setTelefone}
+      />
+      <BotaoPrincipal
         titulo={loading ? 'Salvando...' : 'Cadastrar Paciente'}
-        onPress={salvarPaciente} 
+        onPress={salvarPaciente}
       />
     </View>
   );
@@ -128,21 +141,21 @@ export default function TelaNovoPaciente() {
 //BRUNO: ESTILIZAR AQUI (estilos globais dessa tela)
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
+    flex: 1,
     padding: 16
   },
   titulo: {
-    fontSize: 24, 
+    fontSize: 24,
     marginBottom: 24
   },
   label: {
-    marginBottom: 4, 
+    marginBottom: 4,
     fontSize: 14,
     color: '#1E5393',
     fontWeight: 'bold'
   },
   input: {
-    padding: 12, 
+    padding: 12,
     marginBottom: 12,
     borderWidth: 1,
     borderRadius: 8,

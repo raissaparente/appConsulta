@@ -21,7 +21,7 @@ export default function CardConsulta({
   const getEstiloTag = () => {
     // 1. Se o status no banco for 'realizada', força a tag a virar "Concluída" cinza
     if (status === 'realizada') {
-      return { textoTag: 'CONCLUÍDO', fundo: '#E2E8F0', textoCor: '#4A5568' };
+       return { textoTag: 'CONCLUÍDO', fundo: '#00ff11ff', textoCor: '#4a684eff' };
     }
     // 2. Se não estiver realizada, exibe o tipo da consulta (Urgente, Retorno, etc.)
     const tipoNormalizado = tipo?.toLowerCase() || '';
