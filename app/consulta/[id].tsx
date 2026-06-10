@@ -82,7 +82,7 @@ export default function TelaConsulta() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F4F6', // Fundo cinza claro idêntico ao protótipo
+    backgroundColor: '#F3F4F6',
     paddingHorizontal: 20,
     paddingTop: 24,
   },
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E2E8F0',
     marginBottom: 20,
-    // Sombra sutil para dar o efeito de card elevado
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,

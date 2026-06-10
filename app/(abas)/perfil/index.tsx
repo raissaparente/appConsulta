@@ -1,8 +1,10 @@
-import { View, Text, Pressable, Alert, StyleSheet } from 'react-native';
+import Card from '@/src/components/Card';
+import { Feather, SimpleLineIcons } from '@expo/vector-icons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
-import { collection, addDoc } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { db } from '../../../src/services/firebase';
-
 export default function TelaPerfil() {
   const roteador = useRouter();
 
@@ -10,7 +12,7 @@ export default function TelaPerfil() {
   async function popularBanco() {
     try {
       Alert.alert('Aviso', 'Populando banco, olhe o terminal...');
-      
+
       const medicos = [
         { nome: 'Dr. João Silva', crm: '12345', especialidade: 'Cardiologia' },
         { nome: 'Dra. Maria Souza', crm: '67890', especialidade: 'Dermatologia' },
@@ -63,12 +65,12 @@ export default function TelaPerfil() {
 
       // CRIAR HORÁRIOS DISPONÍVEIS PARA OS PRÓXIMOS 7 DIAS
       const horasDisponiveis = ['09:00', '10:30', '13:00', '15:30', '17:00'];
-      
+
       for (let i = 0; i < 7; i++) {
         const data = new Date();
         data.setDate(data.getDate() + i);
         const dataFmt = data.toISOString().split('T')[0];
-        
+
         for (const medicoId of medicosRefs) {
           for (const hora of horasDisponiveis) {
             // não criar horário disponível se já foi usado nas consultas fake de hoje
@@ -94,35 +96,52 @@ export default function TelaPerfil() {
 
   return (
     <View style={styles.container}>
-      {/* tela crua de perfil, só com a estrutura dos dados */}
-      <Text style={styles.titulo}>Perfil do Funcionário</Text>
-      
-      <Text style={styles.textoNome}>Nome: Funcionário Teste</Text>
-      
-      <Pressable 
-        style={styles.botaoOpcao}
+      {/*Cabeçalho da Página com título e seta que retorna para a tela inicial e botão de opções(teste)*/}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => roteador.back()}>
+          <Feather name="arrow-left" size={24} color="#150080" style={styles.seta} />
+        </TouchableOpacity>
+        <Text style={styles.titulo}>
+          Perfil do Funcionário</Text>
+        <SimpleLineIcons name="options-vertical" size={24} color="black" style={styles.opcao} />
+      </View>
+      {/* Texto mostrando nome e cargo do usuário: */}
+      <View>
+        <Text style={styles.textoNome}>Mariana Silva</Text>
+        <Text style={styles.cargo}>Recepcionista</Text>
+      </View>
+
+      {/* Cards com seção de acesso aos dados do usuário e Alteração de senha */}
+
+      <TouchableOpacity
+        style={styles.botaoDados}
         onPress={() => roteador.push('/perfil/dados')}
       >
-        <Text style={styles.textoOpcao}>Meus Dados</Text>
-      </Pressable>
-      
-      <Pressable 
+        <Card 
+          title='Meus Dados'
+          subtitle='Visualizar informações Pessoais'
+          style={styles.cardDados}
+        >
+        </Card>
+      </TouchableOpacity>
+      <TouchableOpacity
         style={styles.botaoOpcao}
         onPress={() => roteador.push('/perfil/senha')}
       >
-        <Text style={styles.textoOpcao}>Alterar Senha</Text>
-      </Pressable>
-
-      <View style={styles.areaTeste}>
-        <Text style={styles.avisoTeste}>Área de Teste (Remover depois)</Text>
-        <Pressable 
-          onPress={popularBanco}
-          style={styles.botaoTeste}
+        <MaterialIcons name="lock-outline" size={24} color="black" style={styles.cadeado}/>
+        <Card
+          title='Alterar Senha'
+          subtitle='Redefinir Credenciais de Acesso'
         >
-          <Text style={styles.textoBotaoTeste}>
-            Popular Firebase com Pacientes e Consultas (Hoje)
-          </Text>
-        </Pressable>
+
+        </Card>
+      </TouchableOpacity>
+      {/* Função de Logout (falta sincronizar com o banco de dados)*/}
+      <View style={styles.logout}>
+        <MaterialIcons name="exit-to-app" size={24} color="#E53935" />
+        <TouchableOpacity>
+          <Text style={styles.textoLogout}>Sair</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -131,34 +150,84 @@ export default function TelaPerfil() {
 //BRUNO: ESTILIZAR AQUI (estilos globais dessa tela)
 const styles = StyleSheet.create({
   container: {
-    padding: 16
+    padding: 16,
+    marginTop: 4
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    borderBottomWidth: 1,
+    borderRadius: 8,
+    borderColor: '#C9C9C9',
+    shadowColor: '#000'
+  },
+  seta: {
+    marginTop: 30,
+    paddingRight: 12
   },
   titulo: {
-    fontSize: 24, 
-    marginBottom: 24
+    fontSize: 18,
+    marginRight: 10,
+    marginBottom: 10,
+    marginTop: 40,
+  },
+  opcao: {
+    flexDirection: 'row',
+    marginTop: 30,
+    marginLeft: 120,
   },
   textoNome: {
-    marginTop: 20, 
-    fontSize: 16
+    marginTop: 30,
+    fontSize: 20,
+    textAlign: 'center',
+    color: '#000',
+    fontWeight:'700'
+  },
+  cargo: {
+    textAlign: 'center',
+    fontSize: 14,
+    color: '#150080',
+    fontWeight: '500'
+  },
+  botaoDados: {
+    flexDirection: 'row',
+    marginTop: 20,
+    padding: 16,
+    borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    borderColor: '#C9C9C9'
   },
   botaoOpcao: {
-    marginTop: 20, 
-    padding: 16, 
+    flexDirection: 'row',
+    borderWidth: 1,
+    marginTop: 20,
+    borderRadius: 8,
+    borderColor: '#C9C9C9',
+    backgroundColor: '#FFF'
   },
-  textoOpcao: {
+  cadeado:{
+    flexDirection:'column',
+    paddingVertical: 20,
+    justifyContent:'center'
   },
-  areaTeste: {
-    marginTop: 60, 
-    padding: 16, 
+  logout: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 24,
+    borderWidth: 1,
+    borderColor: '#C9C9C9',
+    borderRadius: 8,
+    backgroundColor: '#FFF',
+    height: 60,
+    width: '100%',
   },
-  avisoTeste: {
-    marginBottom: 10, 
+  textoLogout: {
+    color: '#E53935',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 8
   },
-  botaoTeste: {
-    padding: 12, 
-    alignItems: 'center'
-  },
-  textoBotaoTeste: {
-    textAlign: 'center'
-  }
 });

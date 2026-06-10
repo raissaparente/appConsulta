@@ -1,78 +1,143 @@
+import React from 'react';
 import { useRouter } from 'expo-router';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useBuscaPaciente } from '../../../src/hooks/useBuscaPaciente';
 
-import CardConsulta from '../../../src/components/CardConsulta';
-//hook do firebase
-import { useConsultasHoje } from '../../../src/hooks/useConsultasHoje';
+// Importação de ícones nativos do Expo
+import { FontAwesome } from '@expo/vector-icons'; 
 
-export default function TelaInicio() {
-  const { consultasHoje } = useConsultasHoje(); //array de consultas do db
-  const roteador = useRouter(); //navegação
+import BotaoPrincipal from '../../../src/components/BotaoPrincipal';
+import CardPacienteLista from '../../../src/components/CardPacienteLista';
+
+export default function TelaPesquisa() {
+  const roudator = useRouter();
+  const { texto, setTexto, resultados } = useBuscaPaciente();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>
-        Consultas
-      </Text>
-      <Text style={styles.titulo2}>
-        AGENDA DO DIA
-      </Text>
-      { }
+      {/* Cabeçalho da Tela */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => roudator.back()}>
+          <FontAwesome name="arrow-left" size={20} color="#003366" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitulo}>Pesquisar Paciente</Text>
+      </View>
+
+      <Text style={styles.labelInput}>CPF do paciente</Text>
+      
+      {/* Barra de Busca (Input + Botão lado a lado) */}
+      <View style={styles.barrabusca}>
+        <TextInput
+          placeholder="000.000.000-00"
+          placeholderTextColor="#A9A9A9"
+          value={texto}
+          onChangeText={setTexto}
+          style={styles.input}
+        />
+        <TouchableOpacity style={styles.botaoBuscar}>
+          <Text style={styles.textoBotaoBuscar}>Buscar</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Lista de Pacientes Encontrados e Botão de Cadastrar */}
       <FlatList
-        contentContainerStyle={styles.cardconsulta}
-        data={consultasHoje}
+        data={resultados}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.listContainer}
         renderItem={({ item }) => (
-          <CardConsulta
-            pacienteNome={item.pacienteNome}
-            medicoNome={item.medicoNome}
-            dataHora={item.dataHora}
-            tipo={item.tipo}
-            especialidadeMedico={item.especialidadeMedico}
-            onPress={() => roteador.push(`/consulta/${item.id}`)}
+          <CardPacienteLista 
+            paciente={item}
+            onPress={() => roudator.push(`/paciente/${item.id}`)}
           />
         )}
-        ListEmptyComponent={
-          <Text style={styles.textoVazio}>Nenhuma consulta hoje</Text>
+        ListFooterComponent={
+          <TouchableOpacity 
+            style={styles.botaoCadastrar} 
+            onPress={() => roudator.push('/paciente/novo')}
+          >
+            <FontAwesome name="user-plus" size={18} color="#FFFFFF" style={styles.iconeBotao} />
+            <Text style={styles.textoBotaoCadastrar}>Cadastrar Novo Paciente</Text>
+          </TouchableOpacity>
         }
       />
     </View>
   );
 }
 
-//BRUNO:estilos globais dessa tela pra alterar depois
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F4F6',
-    paddingHorizontal: 20,
-    paddingTop: 10,
+    backgroundColor: '#F5F5F5',
+    paddingHorizontal: 16,
+    paddingTop: 40,
   },
-  titulo: {
-    fontSize: 24,
-    marginBottom: 2,
-    marginTop: 2,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  headerTitulo: {
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#0F2042'
+    color: '#1A1A1A',
+    marginLeft: 16,
   },
-  titulo2: {
-    fontSize: 12, 
-    color: '#200C83',
-    marginBottom: 20, 
-    borderBottomWidth: 1,
-    paddingbottom: 5,
-    borderColor: '#7A869A',
-    fontWeight: '800',
-    letterSpacing: 0.5,
+  labelInput: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#7A7A7A',
+    marginBottom: 4,
   },
-  textoVazio: {
-    textAlign: 'center',
-    marginTop: 20,
-    color: '#0F52BA',
-    fontWeight: 'bold'
+  barrabusca: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+    width: '100%',
   },
-  cardconsulta: {
+  input: {
+    flex: 1,
+    height: 48,
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: '#C9C9C9',
+    borderRadius: 4,
+    fontSize: 16,
+    marginRight: 8,
+  },
+  botaoBuscar: {
+    width: '25%',
+    height: 48,
+    backgroundColor: '#00437C',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textoBotaoBuscar: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  listContainer: {
+    flexGrow: 1,
+    paddingBottom: 20,
+  },
+  botaoCadastrar: {
+    flexDirection: 'row',
+    backgroundColor: '#00437C',
+    height: 48,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  iconeBotao: {
+    marginRight: 8,
+  },
+  textoBotaoCadastrar: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 14,
   }
 });

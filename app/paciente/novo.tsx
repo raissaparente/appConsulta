@@ -1,11 +1,10 @@
-import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
-import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
-import { useState, useEffect } from 'react';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../../src/services/firebase';
-import { getPacienteById, atualizarPaciente } from '../../src/services/pacienteService';
-
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { addDoc, collection } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 import BotaoPrincipal from '../../src/components/BotaoPrincipal';
+import { db } from '../../src/services/firebase';
+import { atualizarPaciente, getPacienteById } from '../../src/services/pacienteService';
 
 /**
  * Tela de formulário responsável tanto pela CRIACÃO de um novo paciente
@@ -55,7 +54,7 @@ export default function TelaNovoPaciente() {
         await atualizarPaciente(String(params.id), {
           nome,
           cpf,
-          dataNascimento
+          dataNascimento,
         });
         Alert.alert('Sucesso', 'Paciente atualizado com sucesso!');
         roteador.back(); // Volta pra tela de detalhes
@@ -118,7 +117,6 @@ export default function TelaNovoPaciente() {
         value={dataNascimento}
         onChangeText={setDataNascimento}
       />
-
       <BotaoPrincipal 
         titulo={loading ? 'Salvando...' : 'Cadastrar Paciente'}
         onPress={salvarPaciente} 
@@ -139,9 +137,15 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 4, 
+    fontSize: 14,
+    color: '#1E5393',
+    fontWeight: 'bold'
   },
   input: {
     padding: 12, 
-    marginBottom: 16
+    marginBottom: 12,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#C9C9C9'
   }
 });
