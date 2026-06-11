@@ -1,4 +1,15 @@
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+type Props = {
+  pacienteNome: string;
+  medicoNome: string;
+  dataHora: string;
+  tipo?: string;
+  status: string;
+  especialidadeMedico?: string;
+  onPress: () => void;
+};
 
 export default function CardConsulta({
   pacienteNome,
@@ -7,21 +18,21 @@ export default function CardConsulta({
   tipo,
   status,
   especialidadeMedico,
-  onPress
-}) {
+  onPress,
+}: Props) {
 
-  const formatarHora = (stringData) => {
+  const formatarHora = (stringData = '') => {
     if (!stringData) return '00:00';
     const regexHora = /(\d{2}:\d{2})/;
-    const encontrado = stringData.match(regexHora);
-    return encontrado ? encontrado[0] : stringData;
+    const encontrado = String(stringData).match(regexHora);
+    return encontrado ? encontrado[0] : String(stringData);
   };
 
   // Lógica de Cores da Tag baseada no Status e no Tipo
   const getEstiloTag = () => {
     // 1. Se o status no banco for 'realizada', força a tag a virar "Concluída" cinza
-    if (status === 'realizada') {
-       return { textoTag: 'CONCLUÍDO', fundo: '#00ff11ff', textoCor: '#4a684eff' };
+    if (status?.toLowerCase() === 'realizada'){
+      return { textoTag: 'CONCLUÍDO', fundo: '#DCFCE7', textoCor: '#166534' };
     }
     // 2. Se não estiver realizada, exibe o tipo da consulta (Urgente, Retorno, etc.)
     const tipoNormalizado = tipo?.toLowerCase() || '';
@@ -65,7 +76,7 @@ export default function CardConsulta({
         </View>
         <View style={styles.coluna}>
           <Text style={styles.label}>ESPECIALIDADE</Text>
-          <Text style={styles.valorSecundario}>{especialidadeMedico}</Text>
+<Text style={styles.valorSecundario} numberOfLines={1} > {especialidadeMedico} </Text>
         </View>
       </View>
 

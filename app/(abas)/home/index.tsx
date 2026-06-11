@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 2,
     marginTop: 2,
-    fontWeight: 'bold',
+    fontWeight: 'bold', 
     color: '#0F2042'
   },
   titulo2: {
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     color: '#200C83',
     marginBottom: 20, 
     borderBottomWidth: 1,
-    paddingbottom: 5,
+    paddingBottom: 5,
     borderColor: '#7A869A',
     fontWeight: '800',
     letterSpacing: 0.5,

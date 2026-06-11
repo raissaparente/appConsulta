@@ -89,18 +89,19 @@ export default function TelaNovoPaciente() {
 
   return (
     <View style={styles.container}>
-
+      
+      <View style={styles.cardCad}>
         <Card
-          title='Informações básicas'
+          title='INFORMAÇÕES BÁSICAS'
           subtitle='Preencha os dados cadastrais do paciente para registro clínico institucional'
         >
         </Card>
-      
+      </View>
 
       <Text style={styles.label}>Nome Completo</Text>
       <TextInput
         style={styles.input}
-        placeholder="Ex: João da Silva"
+        placeholder=" Ex: João da Silva"
         value={nome}
         onChangeText={setNome}
       />
@@ -108,32 +109,37 @@ export default function TelaNovoPaciente() {
       <Text style={styles.label}>CPF</Text>
       <TextInput
         style={styles.input}
-        placeholder="000.000.000-00"
-        keyboardType="numeric"
+        placeholder=" 000.000.000-00"
+        keyboardType='phone-pad'
         value={cpf}
+        maxLength={14}
         onChangeText={setCpf}
       />
 
       <Text style={styles.label}>Data de Nascimento</Text>
       <TextInput
         style={[styles.input]}
-        placeholder="DD/MM/AAAA"
-        keyboardType="numeric"
+        placeholder=" DD/MM/AAAA"
+        keyboardType="phone-pad"
+        maxLength={10}
         value={dataNascimento}
         onChangeText={setDataNascimento}
       />
       <Text style={styles.label}>Telefone</Text>
       <TextInput
       style={[styles.input]}
-      placeholder='(00) 00000-0000'
+      placeholder=' (00) 00000-0000'
       keyboardType='phone-pad'
+      maxLength={14}
       value={telefone}
       onChangeText={setTelefone}
       />
+      <View style={styles.botaocad}>
       <BotaoPrincipal
         titulo={loading ? 'Salvando...' : 'Cadastrar Paciente'}
         onPress={salvarPaciente}
       />
+      </View>
     </View>
   );
 }
@@ -148,6 +154,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 24
   },
+  cardCad:{
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 10,
+    marginTop: 2,
+    backgroundColor: '#FFF',
+    borderColor: '#C9C9C9'
+  },
   label: {
     marginBottom: 4,
     fontSize: 14,
@@ -155,10 +169,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   input: {
-    padding: 12,
-    marginBottom: 12,
+    padding: 8,
+    marginBottom: 6,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: '#C9C9C9'
+    borderColor: '#C9C9C9',
+    backgroundColor: '#FFF',
+  },
+  botaocad:{
+    marginTop: 12,
   }
 });

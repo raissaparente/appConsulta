@@ -3,7 +3,6 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BotaoPrincipal from '../../src/components/BotaoPrincipal';
 import { useConsulta } from '../../src/hooks/useConsulta';
 import { atualizarStatusConsulta } from '../../src/services/consultaService';
-
 /**
  * Tela que exibe as informações completas de uma consulta.
  * Permite marcar um retorno ou concluir a consulta dependendo do seu status atual.
@@ -13,7 +12,7 @@ export default function TelaConsulta() {
   const roteador = useRouter();
 
   // Busca a consulta a partir do ID que vem na URL da rota
-  const { consulta, medico, paciente } = useConsulta(String(id));
+  const { consulta, medico} = useConsulta(String(id));
 
   if (!consulta) return <Text style={styles.loading}>consulta não encontrada</Text>;
 
@@ -36,10 +35,7 @@ export default function TelaConsulta() {
   return (
     <View style={styles.container}>
       <View style={styles.cardInfo}>
-
-        <Text style={styles.label}>PACIENTE</Text>
-        <Text style={styles.valor}>{consulta?.pacienteNome}</Text>
-
+        
         <Text style={styles.label}>MÉDICO</Text>
         <Text style={styles.valor}>{medico?.nome}</Text>
         
@@ -55,12 +51,13 @@ export default function TelaConsulta() {
         <Text style={styles.label}>HORÁRIO</Text>
         <Text style={styles.valor}>{horaFmt}</Text>       
       </View>
+
 {consulta.status !== 'realizada' && (
         <BotaoPrincipal
           titulo="Consulta Concluída"
           onPress={concluirConsulta}
         />
-      )}''
+      )}
 
    <TouchableOpacity 
         style={styles.botaoSecundario}

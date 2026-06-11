@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ConsultaPaciente } from '../hooks/usePaciente';
 
 type Props = {
@@ -11,7 +11,7 @@ export default function CardHistoricoConsulta({ consulta, onPress }: Props) {
   const dataFmt = data.split('-').reverse().join('/');
 
   return (
-    <Pressable
+    <TouchableOpacity
       style={[
         styles.cardConsulta,
         { borderLeftColor: consulta.status === 'realizada' ? '#4caf50' : '#2196f3' }
@@ -24,7 +24,7 @@ export default function CardHistoricoConsulta({ consulta, onPress }: Props) {
         </Text>
       </View>
       <Text style={styles.consultaStatus}>{dataFmt} às {hora} {consulta.status}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 }
 
@@ -41,16 +41,19 @@ const styles = StyleSheet.create({
   consultaHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 4
+    marginBottom: 2
   },
   consultaDataHora: {
     fontSize: 16,
   },
   consultaStatus: {
-    color: '#1E5393'
+    fontWeight: 'bold',
+    fontSize: 14
   },
   consultaMedico: {
-    fontSize: 14,
-    marginTop: 4
+    fontSize: 16,
+    marginTop: 4,
+    fontWeight: '500',
+    color:'#1E5393'
   }
 });

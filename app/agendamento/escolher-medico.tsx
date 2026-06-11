@@ -1,9 +1,9 @@
-import { View, Text, Pressable, FlatList, StyleSheet } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { getMedicos } from '../../src/services/medicoService';
 import { Medico } from '../../src/models/Medico';
+import { getMedicos } from '../../src/services/medicoService';
 
 export default function TelaEscolherMedico() {
   const roteador = useRouter();
@@ -42,24 +42,22 @@ export default function TelaEscolherMedico() {
       {/* CARD PROGRESSIVO: ETAPA 2 */}
       {params.pacienteNome && (
         <View style={styles.cardResumo}>
-          <Text style={styles.cardLabel}>Agendando para:</Text>
-          <Text style={styles.cardInfoNome}>{params.pacienteNome}</Text>
+          <Text style={styles.cardLabel}>DADOS DO PACIENTE</Text>
+          <Text style={styles.cardInfoNome}>Paciente: {params.pacienteNome}</Text>
           <Text style={styles.cardInfoSub}>CPF: {params.pacienteCpf}</Text>
-          <View style={styles.linhaDivisoria} />
-          <Text style={styles.cardLabel}>Especialidade:</Text>
-          <Text style={styles.cardInfoNome}>{params.especialidade}</Text>
+          <Text style={styles.cardEspec}>Especialidade:{params.especialidade}</Text>
         </View>
       )}
 
       <Text style={styles.titulo}>
-        Escolha o médico ({params.especialidade})
+        Selecionar médico
       </Text>
 
       <FlatList
         data={medicos}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <Pressable
+          <TouchableOpacity
             style={styles.botao}
             onPress={() =>
               // repassa todos os dados da URL + o medicoId
@@ -70,7 +68,7 @@ export default function TelaEscolherMedico() {
           >
             <Text style={styles.textoBotao}>{item.nome}</Text>
             <Text style={styles.textoSub}>CRM: {item.crm}</Text>
-          </Pressable>
+          </TouchableOpacity>
         )}
         ListEmptyComponent={
           <Text style={styles.emptyTexto}>Nenhum médico encontrado para essa especialidade.</Text>
@@ -92,34 +90,53 @@ const styles = StyleSheet.create({
   cardResumo: {
     padding: 16,
     marginBottom: 24,
+    borderWidth: 1,
+    borderColor: '#C9C9C9',
+    backgroundColor: '#FFF',
+    borderRadius:8,
   },
   cardLabel: {
-    fontSize: 12,
-    marginBottom: 4
+    fontSize: 10,
+    marginBottom: 4,
+    color: '#1E5393',
+    fontWeight: '600'
+  },
+  cardEspec:{
+    color:'#1E5393',
+    fontWeight: '500'
   },
   cardInfoNome: {
     fontSize: 16,
+    marginBottom: 4,
+    fontWeight: 'bold'
   },
   cardInfoSub: {
-    fontSize: 12,
-  },
-  linhaDivisoria: {
-    height: 1,
-    marginVertical: 12
+    fontSize: 14,
+    marginBottom: 10,
+    color:'#1E5393',
+    fontWeight:'500'
   },
   titulo: {
     fontSize: 20, 
     marginBottom: 16,
+    fontWeight: 'bold'
   },
   botao: {
     padding: 16, 
-    marginBottom: 8, 
+    marginBottom:6, 
+    borderWidth: 1,
+    backgroundColor:'#FFF',
+    borderRadius: 8,
+    borderColor: '#C9C9C9',
   },
   textoBotao: {
-    fontSize: 16, 
+    fontSize: 16,
+    fontWeight: '500' 
   },
   textoSub: {
     fontSize: 12, 
+    color: '#1E5393',
+    fontWeight: '500'
   },
   emptyTexto: {
   }
