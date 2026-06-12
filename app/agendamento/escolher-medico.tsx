@@ -43,9 +43,9 @@ export default function TelaEscolherMedico() {
       {params.pacienteNome && (
         <View style={styles.cardResumo}>
           <Text style={styles.cardLabel}>DADOS DO PACIENTE</Text>
-          <Text style={styles.cardInfoNome}>Paciente: {params.pacienteNome}</Text>
-          <Text style={styles.cardInfoSub}>CPF: {params.pacienteCpf}</Text>
-          <Text style={styles.cardEspec}>Especialidade:{params.especialidade}</Text>
+          <Text style={styles.cardInfoNome}>Paciente: <Text style={styles.cardNome}>{params.pacienteNome}</Text></Text>
+          <Text style={styles.cardInfoSub}>CPF: <Text style={styles.cpf}>{params.pacienteCpf}</Text></Text>
+          <Text style={styles.cardInfoEspec}>Especialidade: <Text style={styles.espesc}>{params.especialidade}</Text></Text>
         </View>
       )}
 
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   cardResumo: {
     padding: 16,
-    marginBottom: 24,
+    marginBottom: 16,
     borderWidth: 1,
     borderColor: '#C9C9C9',
     backgroundColor: '#FFF',
@@ -97,24 +97,37 @@ const styles = StyleSheet.create({
   },
   cardLabel: {
     fontSize: 10,
-    marginBottom: 4,
+    marginBottom: 8,
     color: '#1E5393',
     fontWeight: '600'
   },
-  cardEspec:{
+  cardInfoEspec:{
     color:'#1E5393',
-    fontWeight: '500'
+    fontWeight: '600'
+  },
+  espesc:{
+    color:'#000',
+    fontWeight:'500'
   },
   cardInfoNome: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 4,
-    fontWeight: 'bold'
+    fontWeight: '600',
+    color:'#1E5393'
+  },
+  cardNome:{
+    fontWeight: '500',
+    color: '#000'
   },
   cardInfoSub: {
     fontSize: 14,
-    marginBottom: 10,
+    marginBottom: 4,
     color:'#1E5393',
-    fontWeight:'500'
+    fontWeight:'600'
+  },
+  cpf:{
+    color: '#000',
+    fontWeight: '500'
   },
   titulo: {
     fontSize: 20, 
@@ -131,12 +144,12 @@ const styles = StyleSheet.create({
   },
   textoBotao: {
     fontSize: 16,
-    fontWeight: '500' 
+    fontWeight: '600' 
   },
   textoSub: {
     fontSize: 12, 
     color: '#1E5393',
-    fontWeight: '500'
+    fontWeight: '600'
   },
   emptyTexto: {
   }

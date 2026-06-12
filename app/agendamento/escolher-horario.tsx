@@ -62,12 +62,12 @@ export default function TelaEscolherHorario() {
       {/* CARD PROGRESSIVO: ETAPA 3 */}
       {params.pacienteNome && (
         <View style={styles.cardResumo}>
-          <Text style={styles.cardLabel}>AGENDADO PARA:</Text>
+          <Text style={styles.cardLabel}>DADOS DO PACIENTE</Text>
           
-          <Text style={styles.cardInfo}><Text style={styles.cardLabel}>Paciente:</Text>{params.pacienteNome}</Text>
-          <Text style={styles.cardInfo}><Text style={styles.cardLabel}>CPF:</Text>{params.pacienteCpf}</Text>
-          <Text style={styles.cardInfo}><Text style={styles.cardLabel}>Especialidade:</Text>{params.especialidade}</Text>
-          <Text style={styles.cardInfo}><Text style={styles.cardLabel}>Médico:</Text> {params.medicoNome}</Text>
+          <Text style={styles.cardInfo}><Text style={styles.cardInfoSub}>Paciente: </Text>{params.pacienteNome}</Text>
+          <Text style={styles.cardInfo}><Text style={styles.cardInfoSub}>CPF: </Text>{params.pacienteCpf}</Text>
+          <Text style={styles.cardInfo}><Text style={styles.cardInfoSub}>Especialidade: </Text>{params.especialidade}</Text>
+          <Text style={styles.cardInfo}><Text style={styles.cardInfoSub}>Médico: </Text>{params.medicoNome}</Text>
         </View>
       )}
 
@@ -105,7 +105,7 @@ export default function TelaEscolherHorario() {
         numColumns={3}  // Coloca uma grade de 3 colunas
         showsVerticalScrollIndicator={false} //Barrinha de rolagem na vertical some
         renderItem={({ item }) => {
-          // Extrair só a hora (HH:mm) pra mostrar bonito na tela
+          // Extrair só a hora (HH:mm) pra mostrar bonito na tela:
           const horaString = item.dataHora.split('T')[1];
           return (
             <Pressable
@@ -146,14 +146,26 @@ const styles = StyleSheet.create({
   },
   cardResumo: {
     padding: 16,
-    marginBottom: 24,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#C9C9C9',
+    backgroundColor: '#FFFFFF'
   },
   cardLabel: {
-    fontSize: 12,
-    marginBottom: 4
+    fontSize: 10,
+    marginBottom: 4,
+    color: '#1E5393',
+    fontWeight: '500'
   },
   cardInfo: {
     fontSize: 16,
+    color:'#000000',
+    fontWeight: '500'
+  },
+  cardInfoSub:{
+    color: '#1E5393',
+    fontWeight: '600'
   },
   titulo: {
     fontSize: 20, 
@@ -186,7 +198,8 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   diaTextoInativo: {
-    color: '#4B5563'
+    color: '#C9C9C9',
+    fontWeight: '600'
   },
   horarioBotaoPressionado:{
     backgroundColor: '#1E5393',
@@ -206,12 +219,13 @@ const styles = StyleSheet.create({
   horarioTexto: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: '#000',
   },
   emptyTexto: {
     textAlign: 'center',
     marginTop: 30,
-    color: '#7A869A',
+    color: '#000',
+    fontWeight: '500',
     fontSize: 14
   }
 });

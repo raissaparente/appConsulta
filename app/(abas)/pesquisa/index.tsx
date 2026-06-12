@@ -24,7 +24,7 @@ export default function TelaPesquisa() {
       {/* Barra de Busca*/}
       <View style={styles.barrabusca}>
         <TextInput
-          placeholder="Digite seu nome ou CPF..."
+          placeholder="Digite seu nome ou CPF"
           placeholderTextColor="#A9A9A9"
           value={texto}
           onChangeText={setTexto}
@@ -109,6 +109,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     fontSize: 16,
     marginRight: 8,
+    textAlign: 'left',
+    paddingTop: 8
   },
   botaoBuscar: {
     width: '25%',
