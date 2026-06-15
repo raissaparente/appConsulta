@@ -1,4 +1,3 @@
-import Card from '@/src/components/Card';
 import { Feather, SimpleLineIcons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
@@ -114,35 +113,63 @@ export default function TelaPerfil() {
       {/* Cards com seção de acesso aos dados do usuário e Alteração de senha */}
 
       <TouchableOpacity
-        style={styles.botaoDados}
+        style={styles.Botao}
         onPress={() => roteador.push('/perfil/dados')}
       >
-        <Card 
-          title='Meus Dados'
-          subtitle='Visualizar informações Pessoais'
-          style={styles.cardDados}
-        >
-        </Card>
+        <View style={styles.iconeDados}>
+          <Feather
+            name="user"
+            size={24}
+            color="#003D82"
+          />
+        </View>
+
+        <View style={styles.areaTexto}>
+          <Text style={styles.textoInfo}>Meus Dados</Text>
+          <Text style={styles.textoInfosub}>
+            Visualizar informações pessoais
+          </Text>
+        </View>
+
+        <Feather
+          name="chevron-right"
+          size={24}
+          color="#8A8A8A"
+        />
       </TouchableOpacity>
+
       <TouchableOpacity
-        style={styles.botaoOpcao}
+        style={styles.Botao}
         onPress={() => roteador.push('/perfil/senha')}
       >
-        <MaterialIcons name="lock-outline" size={24} color="black" style={styles.cadeado}/>
-        <Card
-          title='Alterar Senha'
-          subtitle='Redefinir Credenciais de Acesso'
-        >
+        <View style={styles.iconeSenha}>
+          <MaterialIcons
+            name="lock-outline"
+            size={24}
+            color="#4B5563"
+          />
+        </View>
 
-        </Card>
+        <View style={styles.areaTexto}>
+          <Text style={styles.textoInfo}>Alterar Senha</Text>
+          <Text style={styles.textoInfosub}>
+            Redefinir credenciais de acesso
+          </Text>
+        </View>
+
+        <Feather
+          name="chevron-right"
+          size={24}
+          color="#8A8A8A"
+        />
       </TouchableOpacity>
+
       {/* Função de Logout (falta sincronizar com o banco de dados)*/}
-      <View style={styles.logout}>
+      <TouchableOpacity
+        style={styles.logout}>
         <MaterialIcons name="exit-to-app" size={24} color="#E53935" />
-        <TouchableOpacity>
-          <Text style={styles.textoLogout}>Sair</Text>
-        </TouchableOpacity>
-      </View>
+        <Text style={styles.textoLogout}>Sair</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -182,7 +209,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     color: '#000',
-    fontWeight:'700'
+    fontWeight: '700'
   },
   cargo: {
     textAlign: 'center',
@@ -190,36 +217,63 @@ const styles = StyleSheet.create({
     color: '#150080',
     fontWeight: '500'
   },
-  botaoDados: {
+  textoInfo: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#222',
+    textAlign: 'left',
+    marginBottom: 2,
+  },
+  textoInfosub: {
+    fontSize: 14,
+    color: '#1E5393',
+    fontWeight: '500',
+    textAlign: 'left',
+  },
+ Botao: {
     flexDirection: 'row',
-    marginTop: 20,
+    alignItems: 'center',
+    borderWidth: 1,
+    marginTop: 16,
+    borderRadius: 12,
+    borderColor: '#D1D5DB',
+    backgroundColor: '#FFF',
     padding: 16,
-    borderWidth: 1,
-    borderRadius: 8,
-    backgroundColor: '#fff',
-    borderColor: '#C9C9C9'
   },
-  botaoOpcao: {
-    flexDirection: 'row',
-    borderWidth: 1,
-    marginTop: 20,
-    borderRadius: 8,
-    borderColor: '#C9C9C9',
-    backgroundColor: '#FFF'
+  setaCard: {
+    position: 'absolute',
+    right: 16,
+    top: '70%',
+    marginTop: -12,
   },
-  cadeado:{
-    flexDirection:'column',
-    paddingVertical: 20,
-    justifyContent:'center'
+  iconeDados: {
+    width: 32,
+    height: 32,
+    borderRadius: 12,
+    backgroundColor: '#DCE8FF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconeSenha: {
+    width: 32,
+    height: 32,
+    borderRadius: 12,
+    backgroundColor: '#E5E7EB',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  areaTexto: {
+    flex: 1,
+    marginLeft: 16,
   },
   logout: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 24,
+    marginTop: 30,
     borderWidth: 1,
     borderColor: '#C9C9C9',
-    borderRadius: 8,
+    borderRadius: 12,
     backgroundColor: '#FFF',
     height: 60,
     width: '100%',
