@@ -1,4 +1,4 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ConsultaPaciente } from '../hooks/usePaciente';
 
 type Props = {
@@ -9,9 +9,9 @@ type Props = {
 export default function CardHistoricoConsulta({ consulta, onPress }: Props) {
   const [data, hora] = consulta.dataHora.split('T');
   const dataFmt = data.split('-').reverse().join('/');
-  
+
   return (
-    <Pressable
+    <TouchableOpacity
       style={[
         styles.cardConsulta,
         { borderLeftColor: consulta.status === 'realizada' ? '#4caf50' : '#2196f3' }
@@ -19,13 +19,12 @@ export default function CardHistoricoConsulta({ consulta, onPress }: Props) {
       onPress={onPress}
     >
       <View style={styles.consultaHeader}>
-        <Text style={styles.consultaDataHora}>{dataFmt} às {hora}</Text>
-        <Text style={styles.consultaStatus}>{consulta.status}</Text>
+        <Text style={styles.consultaMedico}>
+          {consulta.medicoNome} {consulta.especialidadeMedico ? `• ${consulta.especialidadeMedico}` : ''}
+        </Text>
       </View>
-      <Text style={styles.consultaMedico}>
-        {consulta.medicoNome} {consulta.especialidadeMedico ? `• ${consulta.especialidadeMedico}` : ''}
-      </Text>
-    </Pressable>
+      <Text style={styles.consultaStatus}>{dataFmt} às {hora} {consulta.status}</Text>
+    </TouchableOpacity>
   );
 }
 
@@ -33,21 +32,28 @@ export default function CardHistoricoConsulta({ consulta, onPress }: Props) {
 const styles = StyleSheet.create({
   cardConsulta: {
     backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#C9C9C9',
     padding: 16,
     marginBottom: 12,
   },
   consultaHeader: {
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    marginBottom: 4
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 2
   },
   consultaDataHora: {
-    fontSize: 16
+    fontSize: 16,
   },
   consultaStatus: {
+    fontWeight: 'bold',
+    fontSize: 14
   },
   consultaMedico: {
-    fontSize: 14,
-    marginTop: 4
+    fontSize: 16,
+    marginTop: 4,
+    fontWeight: '500',
+    color:'#1E5393'
   }
 });

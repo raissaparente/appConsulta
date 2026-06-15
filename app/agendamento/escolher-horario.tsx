@@ -1,6 +1,6 @@
-import { View, Text, Pressable, FlatList, ScrollView, StyleSheet } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { HorarioDisponivel } from '../../src/models/HorarioDisponivel';
 import { getHorariosDoMedico } from '../../src/services/horarioService';
 
@@ -62,23 +62,22 @@ export default function TelaEscolherHorario() {
       {/* CARD PROGRESSIVO: ETAPA 3 */}
       {params.pacienteNome && (
         <View style={styles.cardResumo}>
-          <Text style={styles.cardLabel}>Agendando para:</Text>
-          <Text style={styles.cardInfoNome}>{params.pacienteNome}</Text>
-          <Text style={styles.cardInfoSub}>CPF: {params.pacienteCpf}</Text>
-          <View style={styles.linhaDivisoria} />
-          <Text style={styles.cardLabel}>Profissional:</Text>
-          <Text style={styles.cardInfoNome}>{params.medicoNome}</Text>
-          <Text style={styles.cardInfoSub}>{params.especialidade}</Text>
+          <Text style={styles.cardLabel}>DADOS DO PACIENTE</Text>
+          
+          <Text style={styles.cardInfo}><Text style={styles.cardInfoSub}>Paciente: </Text>{params.pacienteNome}</Text>
+          <Text style={styles.cardInfo}><Text style={styles.cardInfoSub}>CPF: </Text>{params.pacienteCpf}</Text>
+          <Text style={styles.cardInfo}><Text style={styles.cardInfoSub}>Especialidade: </Text>{params.especialidade}</Text>
+          <Text style={styles.cardInfo}><Text style={styles.cardInfoSub}>Médico: </Text>{params.medicoNome}</Text>
         </View>
       )}
 
       <Text style={styles.titulo}>
-        Escolher horário
+        ESCOLHER HORÁRIO
       </Text>
 
       {/* Carrossel Horizontal de Datas ("Calendário") */}
       <View style={styles.carrosselContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.carrosselScroll}>
           {dias.map(dia => {
             const isSelecionado = diaSelecionado === dia.dataStr;
             return (
@@ -103,12 +102,17 @@ export default function TelaEscolherHorario() {
       <FlatList
         data={horariosFiltrados}
         keyExtractor={(item) => item.id}
+        numColumns={3}  // Coloca uma grade de 3 colunas
+        showsVerticalScrollIndicator={false} //Barrinha de rolagem na vertical some
         renderItem={({ item }) => {
-          // Extrair só a hora (HH:mm) pra mostrar bonito na tela
+          // Extrair só a hora (HH:mm) pra mostrar bonito na tela:
           const horaString = item.dataHora.split('T')[1];
           return (
             <Pressable
-              style={styles.horarioBotao}
+            style={({ pressed }) => [
+                styles.horarioBotao,
+                pressed && styles.horarioBotaoPressionado 
+              ]}
               onPress={() =>
                 roteador.push(
                   `/agendamento/confirmar?horarioId=${item.id}&dataHora=${item.dataHora}&medicoId=${item.medicoId}&pacienteId=${params.pacienteId}`
@@ -131,28 +135,37 @@ export default function TelaEscolherHorario() {
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    padding: 16
+    padding: 24,
+    paddingHorizontal: 20,
+    backgroundColor: '#F3F4F6'
   },
   loading: {
     padding: 16,
+    textAlign: 'center',
+    color: '#7A869A'
   },
   cardResumo: {
     padding: 16,
-    marginBottom: 24,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#C9C9C9',
+    backgroundColor: '#FFFFFF'
   },
   cardLabel: {
-    fontSize: 12,
-    marginBottom: 4
+    fontSize: 10,
+    marginBottom: 4,
+    color: '#1E5393',
+    fontWeight: '500'
   },
-  cardInfoNome: {
+  cardInfo: {
     fontSize: 16,
+    color:'#000000',
+    fontWeight: '500'
   },
-  cardInfoSub: {
-    fontSize: 12,
-  },
-  linhaDivisoria: {
-    height: 1,
-    marginVertical: 12
+  cardInfoSub:{
+    color: '#1E5393',
+    fontWeight: '600'
   },
   titulo: {
     fontSize: 20, 
@@ -161,28 +174,58 @@ const styles = StyleSheet.create({
   carrosselContainer: {
     marginBottom: 24
   },
+  carrosselScroll:{
+    paddingRight: 20
+  },
   diaBotao: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     marginRight: 8,
+    borderRadius: 6,
+    borderWidth : 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   diaBotaoSelecionado: {
-  },
+    backgroundColor: '#1E5393',
+    borderColor: '#1E5393',
+    },
   diaBotaoInativo: {
+ backgroundColor: '#FFFFFF',
+ borderColor: '#E2E8F0',
   },
   diaTextoSelecionado: {
+    color: '#FFFFFF',
   },
   diaTextoInativo: {
+    color: '#C9C9C9',
+    fontWeight: '600'
+  },
+  horarioBotaoPressionado:{
+    backgroundColor: '#1E5393',
+    color: '#FFFFFF'
   },
   horarioBotao: {
-    padding: 16, 
-    marginBottom: 8, 
+    width : '31%',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    borderRadius: 6,
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 2
   },
   horarioTexto: {
-    fontSize: 16, 
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#000',
   },
   emptyTexto: {
     textAlign: 'center',
-    marginTop: 20
+    marginTop: 30,
+    color: '#000',
+    fontWeight: '500',
+    fontSize: 14
   }
 });
