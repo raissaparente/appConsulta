@@ -71,7 +71,7 @@ async function limparColecao(nomeColecao) {
 
 function gerarProximosDias() {
   const dias = [];
-  for (let i = 1; i <= 7; i++) {
+  for (let i = 0; i < 7; i++) {
     const data = new Date();
     data.setDate(data.getDate() + i);
     dias.push(data.toISOString().split('T')[0]); // "YYYY-MM-DD"
