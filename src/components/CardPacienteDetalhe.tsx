@@ -21,6 +21,11 @@ export default function CardPacienteDetalhe({
       </View>
 
       <View style={styles.campo}>
+        <Text style={styles.label}>NOME</Text>
+        <Text style={styles.valor}>{paciente?.nome}</Text>
+      </View>
+
+      <View style={styles.campo}>
         <Text style={styles.label}>CPF</Text>
         <Text style={styles.valor}>{paciente?.cpf}</Text>
       </View>
