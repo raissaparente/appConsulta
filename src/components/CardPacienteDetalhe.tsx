@@ -1,4 +1,4 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Paciente } from '../models/Paciente';
 
 type Props = {
@@ -6,50 +6,90 @@ type Props = {
   onEditPress: () => void;
 };
 
-/**
- * Card para exibir os detalhes primordiais de um paciente,
- * utilizado na tela de Perfil do Paciente. Inclui um botão para acionar a edição.
- */
-export default function CardPacienteDetalhe({ paciente, onEditPress }: Props) {
+export default function CardPacienteDetalhe({
+  paciente,
+  onEditPress,
+}: Props) {
   return (
-    <View style={styles.cardPaciente}>
-      <View style={styles.headerCard}>
-        <Text style={styles.nomePaciente}>{paciente?.nome}</Text>
-        <Pressable onPress={onEditPress} style={styles.botaoEditar}>
-          <Text style={styles.textoBotaoEditar}>Editar</Text>
+    <View style={styles.card}>
+      <View style={styles.header}>
+        <Text style={styles.titulo}>Dados Pessoais</Text>
+
+        <Pressable onPress={onEditPress}>
+          <Text style={styles.botaoEditar}>EDITAR</Text>
         </Pressable>
       </View>
-      <Text style={styles.subtextoPaciente}>CPF: {paciente?.cpf}</Text>
-      <Text style={styles.subtextoPaciente}>Nascimento: {paciente?.dataNascimento || 'Não informado'}</Text>
-      {paciente?.email && <Text style={styles.subtextoPaciente}>E-mail: {paciente?.email}</Text>}
+
+      <View style={styles.campo}>
+        <Text style={styles.label}>CPF</Text>
+        <Text style={styles.valor}>{paciente?.cpf}</Text>
+      </View>
+
+      <View style={styles.campo}>
+        <Text style={styles.label}>DATA DE NASCIMENTO</Text>
+        <Text style={styles.valor}>
+          {paciente?.dataNascimento || 'Não informado'}
+        </Text>
+      </View>
+
+      <View style={styles.campo}>
+        <Text style={styles.label}>TELEFONE</Text>
+        <Text style={styles.valor}>
+          {paciente?.telefone || 'Não informado'}
+        </Text>
+      </View>
+
+      {paciente?.email && (
+        <View style={styles.campo}>
+          <Text style={styles.label}>E-MAIL</Text>
+          <Text style={styles.valor}>{paciente?.email}</Text>
+        </View>
+      )}
     </View>
   );
 }
 
-//BRUNO: ESTILIZAR AQUI (estilos globais desse componente)
 const styles = StyleSheet.create({
-  cardPaciente: {
-    backgroundColor: '#fff',
-    padding: 16, 
-    marginBottom: 24, 
+  card: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#D7DCE3',
+    borderRadius: 12,
+    padding: 18,
+    marginBottom: 20,
   },
-  headerCard: {
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    alignItems: 'center', 
-    marginBottom: 8
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  titulo: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#222',
   },
   botaoEditar: {
-    backgroundColor: '#eee',
-    padding: 8, 
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1E5393',
+    textTransform: 'uppercase',
   },
-  textoBotaoEditar: {
+  campo: {
+    marginBottom: 22,
   },
-  nomePaciente: {
-    fontSize: 22, 
-    marginBottom: 8
+
+  label: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#1E5393',
+    letterSpacing: 1,
+    marginBottom: 4,
   },
-  subtextoPaciente: {
-    marginBottom: 4
-  }
+
+  valor: {
+    fontSize: 18,
+    color: '#222',
+    fontWeight: '400',
+  },
 });

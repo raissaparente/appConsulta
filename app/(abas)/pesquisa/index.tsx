@@ -1,9 +1,9 @@
+import Feather from '@expo/vector-icons/Feather';
 import { useRouter } from 'expo-router';
-import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
-import { useBuscaPaciente } from '../../../src/hooks/useBuscaPaciente';
-
-import BotaoPrincipal from '../../../src/components/BotaoPrincipal';
+import React from 'react';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import CardPacienteLista from '../../../src/components/CardPacienteLista';
+import { useBuscaPaciente } from '../../../src/hooks/useBuscaPaciente';
 
 export default function TelaPesquisa() {
   const roteador = useRouter();
@@ -11,71 +11,139 @@ export default function TelaPesquisa() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Pesquisar paciente</Text>
+      {/* Cabeçalho da Tela */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => roteador.back()}>
+          <Feather name="arrow-left" size={20} color="#003366" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitulo}>Pesquisar Paciente</Text>
+      </View>
 
-      <TextInput
-        placeholder="Digite o nome ou CPF..."
-        value={texto}
-        onChangeText={setTexto}
-        style={styles.input}
-      />
+      <Text style={styles.labelInput}>Nome/CPF do Paciente</Text>
 
+      {/* Barra de Busca*/}
+      <View style={styles.barrabusca}>
+        <TextInput
+          placeholder="Digite seu nome ou CPF"
+          placeholderTextColor="#A9A9A9"
+          value={texto}
+          onChangeText={setTexto}
+          style={styles.input}
+        />
+        <TouchableOpacity style={styles.botaoBuscar}>
+          <Text style={styles.textoBotaoBuscar}>Buscar</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Lista de Pacientes Encontrados e Botão de Cadastrar */}
       <FlatList
         data={resultados}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
         renderItem={({ item }) => (
-          <CardPacienteLista 
+          <CardPacienteLista
             paciente={item}
             onPress={() => roteador.push(`/paciente/${item.id}`)}
           />
         )}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            {texto.trim().length === 0 ? (
-              <Text style={styles.emptyTexto}>
-                Digite um nome ou CPF para buscar pacientes.
-              </Text>
-            ) : (
-              <Text style={styles.emptyTexto}>
-                Nenhum paciente encontrado.
-              </Text>
-            )}
-          </View>
-        }
         ListFooterComponent={
-          <BotaoPrincipal
-            titulo="+ Criar Novo Paciente"
+          <TouchableOpacity
+            style={styles.botaoCadastrar}
             onPress={() => roteador.push('/paciente/novo')}
-          />
+          >
+            <Feather
+              name="user-plus"
+              size={18}
+              color="#FFF"
+              style={styles.iconeBotao}
+            />
+            <Text style={styles.textoBotaoCadastrar}>
+              Cadastrar Novo Paciente
+            </Text>
+          </TouchableOpacity>
         }
       />
     </View>
   );
 }
 
-//BRUNO: ESTILIZAR AQUI (estilos globais dessa tela)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    backgroundColor: '#F5F5F5',
+    paddingHorizontal: 16,
+    paddingTop: 26,
   },
-  titulo: {
-    fontSize: 22,
-    marginBottom: 12,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+    marginTop: 50
+  },
+  headerTitulo: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1A1A1A',
+    marginLeft: 16,
+  },
+  labelInput: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#1E5393',
+    marginBottom: 4,
+  },
+  barrabusca: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+    width: '100%',
   },
   input: {
-    padding: 12,
-    marginBottom: 16,
+    flex: 1,
+    height: 48,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: '#C9C9C9',
+    borderRadius: 4,
+    fontSize: 16,
+    marginRight: 8,
+    textAlign: 'left',
+    paddingTop: 8
+  },
+  botaoBuscar: {
+    width: '25%',
+    height: 48,
+    backgroundColor: '#1E5393',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textoBotaoBuscar: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   listContainer: {
     flexGrow: 1,
+    paddingBottom: 20,
   },
-  emptyContainer: {
-    marginTop: 40,
+  botaoCadastrar: {
+    flexDirection: 'row',
+    backgroundColor: '#00437C',
+    height: 48,
+    borderRadius: 4,
+    justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 16,
   },
-  emptyTexto: {
-    textAlign: 'center',
+  iconeBotao: {
+    marginRight: 8,
+  },
+  textoBotaoCadastrar: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 14,
   }
 });

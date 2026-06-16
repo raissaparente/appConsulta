@@ -1,6 +1,6 @@
-import { View, Text, Pressable, FlatList, StyleSheet } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 // importamos a função que acabamos de criar pra pegar todos os médicos
 import { getMedicos } from '../../src/services/medicoService';
@@ -45,21 +45,21 @@ export default function TelaEscolherEspecialidade() {
       {/* CARD PROGRESSIVO: ETAPA 1 */}
       {params.pacienteNome && (
         <View style={styles.cardResumo}>
-          <Text style={styles.cardLabel}>Agendando para:</Text>
-          <Text style={styles.cardInfoNome}>{params.pacienteNome}</Text>
+          <Text style={styles.cardLabel}>DADOS DO PACIENTE</Text>
+          <Text style={styles.cardInfoNome}>Paciente: <Text style={styles.cardNome}>{params.pacienteNome}</Text></Text>
           <Text style={styles.cardInfoSub}>CPF: {params.pacienteCpf}</Text>
         </View>
       )}
 
       <Text style={styles.titulo}>
-        Escolha a especialidade
+        Selcionar Especialidade
       </Text>
 
       <FlatList
         data={especialidades}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
-          <Pressable
+          <TouchableOpacity
             style={styles.botao}
             onPress={() =>
               // manda a especialidade escolhida e repassa todos os dados do paciente
@@ -67,7 +67,7 @@ export default function TelaEscolherEspecialidade() {
             }
           >
             <Text style={styles.textoBotao}>{item}</Text>
-          </Pressable>
+          </TouchableOpacity>
         )}
       />
     </View>
@@ -85,27 +85,49 @@ const styles = StyleSheet.create({
   },
   cardResumo: {
     padding: 16,
-    marginBottom: 24,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: '#FFFFFF',
+    borderColor: '#C9C9C9',
+    fontWeight: '500',
   },
   cardLabel: {
-    fontSize: 12,
-    marginBottom: 4
+    fontSize: 10,
+    marginBottom: 4,
+    color: '#1E5393',
+    fontWeight: '500'
   },
   cardInfoNome: {
-    fontSize: 16,
+    fontSize: 14,
+    fontWeight: '400',
+    marginBottom: 2
+  },
+  cardNome:{
+    fontWeight: 'bold',
+    fontSize: 14
   },
   cardInfoSub: {
     fontSize: 12,
+    color: '#1E5393',
+    fontWeight: '500'
   },
   titulo: {
     fontSize: 20, 
     marginBottom: 16,
+    fontWeight: '600',
   },
   botao: {
     padding: 16, 
-    marginBottom: 8, 
+    marginBottom: 6, 
+    borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: '#FFFFFF',
+    borderColor: '#C9C9C9',
   },
   textoBotao: {
     fontSize: 16, 
+    fontWeight: '600',
+    color: '#1E5393'
   }
 });

@@ -12,28 +12,27 @@ export default function TelaInicio() {
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>
-        Consultas de hoje
+        Consultas
       </Text>
-
+      <Text style={styles.titulo2}>
+        AGENDA DO DIA
+      </Text>
       { }
       <FlatList
+        contentContainerStyle={styles.cardconsulta}
         data={consultasHoje}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          //BRUNO: ESTILIZAR ESSE CARD
           <CardConsulta
             pacienteNome={item.pacienteNome}
             medicoNome={item.medicoNome}
             dataHora={item.dataHora}
             tipo={item.tipo}
             especialidadeMedico={item.especialidadeMedico}
-            onPress={() =>
-              //nav pro detalhe da consulta
-              roteador.push(`/consulta/${item.id}`)
-            }
+            status={item.status}
+            onPress={() => roteador.push(`/consulta/${item.id}`)}
           />
         )}
-        //empty state se n tiver nada pra hj:
         ListEmptyComponent={
           <Text style={styles.textoVazio}>Nenhuma consulta hoje</Text>
         }
@@ -45,15 +44,37 @@ export default function TelaInicio() {
 //BRUNO:estilos globais dessa tela pra alterar depois
 const styles = StyleSheet.create({
   container: {
-    flex: 1, //pra ocupar toda a tela
-    padding: 16
+    flex: 1,
+    backgroundColor: '#F3F4F6',
+    paddingHorizontal: 20,
+    paddingTop: 50,
   },
   titulo: {
-    fontSize: 22,
-    marginBottom: 16,
+    fontSize: 24,
+    marginBottom: 2,
+    marginTop: 2,
+    fontWeight: 'bold', 
+    color: '#0F2042'
+  },
+  titulo2: {
+    fontSize: 12, 
+    color: '#200C83',
+    marginBottom: 20, 
+    borderBottomWidth: 1,
+    paddingBottom: 5,
+    borderColor: '#7A869A',
+    fontWeight: '800',
+    letterSpacing: 0.5,
   },
   textoVazio: {
     textAlign: 'center',
-    marginTop: 20
+    marginTop: 10,
+    marginBottom: 10,
+    color: '#0F52BA',
+    fontWeight: 'bold'
+  },
+  cardconsulta: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
   }
 });

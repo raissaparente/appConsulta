@@ -1,4 +1,4 @@
-import { Pressable, Text, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
 
 type Props = {
   titulo: string;
@@ -19,15 +19,19 @@ export default function BotaoPrincipal({ titulo, onPress, style }: Props) {
 }
 
 //BRUNO: ESTILIZAR AQUI (estilos globais desse componente)
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({  
   botao: {
-    backgroundColor: '#fff',
-    padding: 16,
+    backgroundColor: '#1E5393',
+    borderRadius: 8,
+    paddingVertical: 14,
     alignItems: 'center',
-    marginTop: 12,
-    marginBottom: 40
+    justifyContent: 'center',
+    marginBottom: 12,
+    height: 'auto',
   },
   textoBotao: {
-    fontSize: 16
+    color: '#FFF',
+    fontWeight: '700',
+    fontSize: 14,
   }
 });

@@ -1,10 +1,10 @@
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 import { usePaciente } from '../../src/hooks/usePaciente';
 
 import BotaoPrincipal from '../../src/components/BotaoPrincipal';
-import CardPacienteDetalhe from '../../src/components/CardPacienteDetalhe';
 import CardHistoricoConsulta from '../../src/components/CardHistoricoConsulta';
+import CardPacienteDetalhe from '../../src/components/CardPacienteDetalhe';
 
 export default function TelaPaciente() {
   const { id } = useLocalSearchParams();
@@ -16,13 +16,18 @@ export default function TelaPaciente() {
 
   return (
     <ScrollView style={styles.container}>
+       {/* BOTÃO DE NOVA CONSULTA */}
+      <BotaoPrincipal 
+        titulo="Agendar Nova Consulta" 
+        onPress={() => roteador.push(`/agendamento/escolher-especialidade?pacienteId=${id}&pacienteNome=${paciente?.nome}&pacienteCpf=${paciente?.cpf}`)} 
+      />
       {/* CARD DE DADOS DO PACIENTE */}
       <CardPacienteDetalhe 
         paciente={paciente} 
         onEditPress={() => roteador.push(`/paciente/novo?id=${id}`)} 
       />
 
-      <Text style={styles.tituloSecao}>Consultas</Text>
+      <Text style={styles.tituloSecao}>Históricos de Consultas</Text>
 
       {/* LISTA DE CONSULTAS COMO CARDS */}
       {consultas.length === 0 ? (
@@ -31,7 +36,7 @@ export default function TelaPaciente() {
         </Text>
       ) : (
         consultas.map(c => (
-          <CardHistoricoConsulta 
+          <CardHistoricoConsulta
             key={c.id} 
             consulta={c} 
             onPress={() => roteador.push(`/consulta/${c.id}`)} 
@@ -39,11 +44,6 @@ export default function TelaPaciente() {
         ))
       )}
 
-      {/* BOTÃO DE NOVA CONSULTA */}
-      <BotaoPrincipal 
-        titulo="+ Nova Consulta" 
-        onPress={() => roteador.push(`/agendamento/escolher-especialidade?pacienteId=${id}&pacienteNome=${paciente?.nome}&pacienteCpf=${paciente?.cpf}`)} 
-      />
     </ScrollView>
   );
 }
@@ -59,9 +59,13 @@ const styles = StyleSheet.create({
   },
   tituloSecao: {
     fontSize: 18, 
-    marginBottom: 12
+    marginBottom: 14,
+    color:'#1E5393',
+    fontWeight: 'bold'
   },
   textoVazio: {
-    marginBottom: 24
+    marginBottom: 24,
+    textAlign: 'left',
+    fontWeight: 'bold',
   }
 });

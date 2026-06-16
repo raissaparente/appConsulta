@@ -1,29 +1,44 @@
-import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
-import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
-import { useState, useEffect } from 'react';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../../src/services/firebase';
-import { getPacienteById, atualizarPaciente } from '../../src/services/pacienteService';
-
+import Card from '@/src/components/Card';
+import Feather from '@expo/vector-icons/Feather';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { addDoc, collection } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import BotaoPrincipal from '../../src/components/BotaoPrincipal';
+import { db } from '../../src/services/firebase';
+import { atualizarPaciente, getPacienteById } from '../../src/services/pacienteService';
 
 /**
  * Tela de formulário responsável tanto pela CRIACÃO de um novo paciente
  * quanto pela EDICÃO de um paciente existente.
  * A decisão é tomada baseada na existência do parâmetro `id` na rota.
  */
+
 export default function TelaNovoPaciente() {
   const roteador = useRouter();
   const params = useLocalSearchParams();
   // Se o id foi passado na URL, significa que estamos no modo de edição
   const isEdicao = !!params.id;
+// Função para fazer aparecer um calendário na tela quando clicar no input de data de nascimento:
+
+function formatarData(data: Date) {
+  const dia = String(data.getDate()).padStart(2, '0');
+  const mes = String(data.getMonth() + 1).padStart(2, '0');
+  const ano = data.getFullYear();
+
+  return `${dia}/${mes}/${ano}`;
+}
 
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
   const [loading, setLoading] = useState(false);
   const [carregandoDados, setCarregandoDados] = useState(isEdicao);
+  const [mostrarCalendario, setMostrarCalendario] = useState(false);
+  const [data, setData] = useState(new Date());
 
   useEffect(() => {
     async function carregarDados() {
@@ -35,6 +50,7 @@ export default function TelaNovoPaciente() {
           setCpf(paciente.cpf);
           setDataNascimento(paciente.dataNascimento || '');
           setEmail(paciente.email || '');
+          setTelefone(paciente.telefone || '');
         }
       } catch (error) {
         console.log('Erro ao carregar paciente para edição:', error);
@@ -59,6 +75,7 @@ export default function TelaNovoPaciente() {
           cpf,
           dataNascimento,
           email,
+          telefone,
         });
         Alert.alert('Sucesso', 'Paciente atualizado com sucesso!');
         roteador.back(); // Volta pra tela de detalhes
@@ -68,6 +85,7 @@ export default function TelaNovoPaciente() {
           cpf,
           dataNascimento,
           email,
+          telefone,
           criadoEm: new Date().toISOString()
         });
 
@@ -92,15 +110,19 @@ export default function TelaNovoPaciente() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: isEdicao ? 'Editar Paciente' : 'Novo Paciente' }} />
-      <Text style={styles.titulo}>
-        {isEdicao ? 'Editar Paciente' : 'Novo Paciente'}
-      </Text>
+
+      <View style={styles.cardCad}>
+        <Card
+          title='INFORMAÇÕES BÁSICAS'
+          subtitle='Preencha os dados cadastrais do paciente para registro clínico institucional'
+        >
+        </Card>
+      </View>
 
       <Text style={styles.label}>Nome Completo</Text>
       <TextInput
         style={styles.input}
-        placeholder="Ex: João da Silva"
+        placeholder=" Ex: João da Silva"
         value={nome}
         onChangeText={setNome}
       />
@@ -108,19 +130,57 @@ export default function TelaNovoPaciente() {
       <Text style={styles.label}>CPF</Text>
       <TextInput
         style={styles.input}
-        placeholder="000.000.000-00"
-        keyboardType="numeric"
+        placeholder=" 000.000.000-00"
+        keyboardType='phone-pad'
         value={cpf}
+        maxLength={14}
         onChangeText={setCpf}
       />
+      <View>
+        <Text style={styles.label}>Data</Text>
+        <TouchableOpacity
+          style={styles.inputData}
+          onPress={() => setMostrarCalendario(true)}
+        >
+          <Text style={{ color: dataNascimento ? '#000' : '#777' }}>
+            {dataNascimento || 'DD/MM/AAAA'}
+          </Text>
+          <Feather name="calendar" size={24} color="#000" />
 
-      <Text style={styles.label}>Data de Nascimento</Text>
+        </TouchableOpacity>
+     {/* Código para função do calendário aparecer na tela e quando clica em cancelar ele retorna ao input normalmente */}
+        {
+          mostrarCalendario && (
+            <DateTimePicker
+              value={data}
+              mode="date"
+              display="default"
+              maximumDate={new Date()}
+              onChange={(event, selectedDate) => {
+                setMostrarCalendario(false);
+
+                if (event.type === 'dismissed') {
+                  return;
+                }
+
+                if (selectedDate) {
+                  setData(selectedDate);
+                  setDataNascimento(formatarData(selectedDate));
+                }
+              }
+
+              }
+            />
+          )}
+      </View>
+      <Text style={styles.label}>Telefone</Text>
       <TextInput
-        style={styles.input}
-        placeholder="DD/MM/AAAA"
-        keyboardType="numeric"
-        value={dataNascimento}
-        onChangeText={setDataNascimento}
+        style={[styles.input]}
+        placeholder=' (00) 00000-0000'
+        keyboardType='phone-pad'
+        maxLength={14}
+        value={telefone}
+        onChangeText={setTelefone}
       />
 
       <Text style={styles.label}>E-mail</Text>
@@ -132,11 +192,12 @@ export default function TelaNovoPaciente() {
         value={email}
         onChangeText={setEmail}
       />
-
-      <BotaoPrincipal 
-        titulo={loading ? 'Salvando...' : 'Cadastrar Paciente'}
-        onPress={salvarPaciente} 
-      />
+      <View style={styles.botaocad}>
+        <BotaoPrincipal
+          titulo={loading ? 'Salvando...' : 'Cadastrar Paciente'}
+          onPress={salvarPaciente}
+        />
+      </View>
     </View>
   );
 }
@@ -144,18 +205,42 @@ export default function TelaNovoPaciente() {
 //BRUNO: ESTILIZAR AQUI (estilos globais dessa tela)
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    padding: 16
+    flex: 1,
+    padding: 10
   },
-  titulo: {
-    fontSize: 24, 
-    marginBottom: 24
+  cardCad: {
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 8,
+    backgroundColor: '#FFF',
+    borderColor: '#C9C9C9'
   },
   label: {
-    marginBottom: 4, 
+    marginBottom: 2,
+    fontSize: 14,
+    color: '#1E5393',
+    fontWeight: 'bold'
   },
+  inputData: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: 6,
+  marginBottom: 8,
+  borderWidth: 1,
+  borderRadius: 8,
+  borderColor: '#C9C9C9',
+  backgroundColor: '#FFF',
+},
   input: {
-    padding: 12, 
-    marginBottom: 16
+    padding: 6,
+    marginBottom: 2,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#C9C9C9',
+    backgroundColor: '#FFF',
+  },
+  botaocad: {
+    marginTop: 12,
   }
 });

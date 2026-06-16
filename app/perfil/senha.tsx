@@ -1,8 +1,7 @@
-import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-import BotaoPrincipal from '../../src/components/BotaoPrincipal';
 
 export default function TelaAlterarSenha() {
   const roteador = useRouter();
@@ -26,10 +25,11 @@ export default function TelaAlterarSenha() {
     Alert.alert('Sucesso', 'Senha atualizada (fake)!');
     roteador.back();
   }
-
+  /* TELA APENAS VISUAL, AINDA EM FASE DE AJUSTES. */
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Alterar Senha</Text>
+      <Text style={styles.subtitulo}>Sua nova senha deve ter pelo menos 8 caracteres</Text>
 
       <Text style={styles.label}>Senha Atual</Text>
       <TextInput
@@ -58,10 +58,13 @@ export default function TelaAlterarSenha() {
         onChangeText={setConfirmarSenha}
       />
 
-      <BotaoPrincipal 
-        titulo="Atualizar Senha"
-        onPress={atualizarSenha} 
-      />
+      <TouchableOpacity
+       onPress={atualizarSenha} 
+       style={styles.Botao}
+      >
+        <Text style={styles.textoBotao}>Atualizar Senha</Text>
+       
+      </TouchableOpacity>
     </View>
   );
 }
@@ -74,13 +77,45 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 24, 
-    marginBottom: 24
+    marginBottom: 24,
+    fontWeight: 'bold',
+    marginTop: 8
+  },
+  subtitulo:{
+    marginTop: -20,
+    fontSize: 14,
+    marginBottom: 24,
+    fontWeight: '400'
   },
   label: {
     marginBottom: 4, 
+    fontSize: 14,
+    fontWeight: '600'
   },
   input: {
     padding: 12, 
-    marginBottom: 16
-  }
+    marginBottom: 16,
+    borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: '#FFF',
+    borderColor: '#C9C9C9',
+    paddingRight: 10
+  },
+  Botao:{
+    borderWidth: 1,
+    borderRadius: 8,
+    marginTop: 14,
+    padding: 18,
+    width: '100%',
+    alignSelf: 'center',
+    backgroundColor: '#478BF0',
+    borderColor: '#478BF0'
+  },
+  textoBotao:{
+    color: '#FFF',
+    textAlign: 'center',
+    marginRight: 10
+
+  },
+
 });

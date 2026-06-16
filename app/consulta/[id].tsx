@@ -1,7 +1,7 @@
-import { View, Text, Alert, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useConsulta } from '../../src/hooks/useConsulta';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BotaoPrincipal from '../../src/components/BotaoPrincipal';
+import { useConsulta } from '../../src/hooks/useConsulta';
 import { atualizarStatusConsulta } from '../../src/services/consultaService';
 import { enviarEmailConsulta } from '../../src/services/emailService';
 
@@ -61,47 +61,47 @@ export default function TelaConsulta() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Detalhes da Consulta</Text>
-      
       <View style={styles.cardInfo}>
         {paciente && (
           <>
-            <Text style={styles.label}>Paciente</Text>
+            <Text style={styles.label}>PACIENTE</Text>
             <Text style={styles.valor}>{paciente.nome}</Text>
             {paciente.email && <Text style={styles.subValor}>{paciente.email}</Text>}
             <View style={styles.divisor} />
           </>
         )}
 
-        <Text style={styles.label}>Data</Text>
+        <Text style={styles.label}>MÉDICO</Text>
+        <Text style={styles.valor}>{medico?.nome}</Text>
+        
+        <Text style={styles.label}>ESPECIALIDADE</Text>
+        <Text style={styles.valor}>{medico?.especialidade}</Text>
+      
+        <Text style={styles.label}>TIPO</Text>
+        <Text style={styles.valor}>{consulta?.tipo?.toUpperCase()}</Text>
+
+        <Text style={styles.label}>DATA</Text>
         <Text style={styles.valor}>{dataFmt}</Text>
 
-        <View style={styles.divisor} />
-
-        <Text style={styles.label}>Horário</Text>
+        <Text style={styles.label}>HORÁRIO</Text>
         <Text style={styles.valor}>{horaFmt}</Text>
 
-        <View style={styles.divisor} />
-
-        <Text style={styles.label}>Médico</Text>
-        <Text style={styles.valor}>{medico?.nome}</Text>
-        <Text style={styles.subValor}>{medico?.especialidade}</Text>
-        
-        <View style={styles.divisor} />
-        
-        <Text style={styles.label}>Status</Text>
-        <Text style={styles.valorStatus}>{consulta.status}</Text>
+        <Text style={styles.label}>STATUS</Text>
+        <Text style={styles.valorStatus}>{consulta.status?.toUpperCase()}</Text>
       </View>
 
       {consulta.status === 'realizada' && (
-        <BotaoPrincipal
-          titulo="Marcar retorno"
+        <TouchableOpacity 
+          style={styles.botaoSecundario}
+          activeOpacity={0.8}
           onPress={() =>
             roteador.push(
               `/agendamento/escolher-horario?retorno=true&medicoId=${consulta.medicoId}&pacienteId=${consulta.pacienteId}&pacienteNome=${paciente?.nome}&pacienteCpf=${paciente?.cpf}&medicoNome=${medico?.nome}&especialidade=${medico?.especialidade}`
             )
           }
-        />
+        >
+          <Text style={styles.botaoSecundarioTexto}>Marcar Retorno</Text>
+        </TouchableOpacity>
       )}
 
       {consulta.status === 'agendada' && (
@@ -110,26 +110,30 @@ export default function TelaConsulta() {
             titulo="Consulta Concluída"
             onPress={concluirConsulta}
           />
-          <BotaoPrincipal
-            titulo="Remarcar Consulta"
+          <TouchableOpacity 
+            style={styles.botaoSecundario}
+            activeOpacity={0.8}
             onPress={() =>
               roteador.push(
                 `/agendamento/escolher-horario?remarcarId=${consulta.id}&medicoId=${consulta.medicoId}&pacienteId=${consulta.pacienteId}&pacienteNome=${paciente?.nome}&pacienteCpf=${paciente?.cpf}&medicoNome=${medico?.nome}&especialidade=${medico?.especialidade}`
               )
             }
-            style={styles.botaoRemarcar}
-          />
-          <BotaoPrincipal
-            titulo="Cancelar Consulta"
-            onPress={cancelarConsulta}
+          >
+            <Text style={styles.botaoSecundarioTexto}>Remarcar Consulta</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
             style={styles.botaoCancelar}
-          />
+            activeOpacity={0.8}
+            onPress={cancelarConsulta}
+          >
+            <Text style={styles.botaoCancelarTexto}>Cancelar Consulta</Text>
+          </TouchableOpacity>
         </>
       )}
 
       {consulta.status === 'cancelada' && (
         <BotaoPrincipal
-          titulo="Remarcar Consulta"
+          titulo="Remarcar Consulta (Reativar)"
           onPress={() =>
             roteador.push(
               `/agendamento/escolher-horario?remarcarId=${consulta.id}&medicoId=${consulta.medicoId}&pacienteId=${consulta.pacienteId}&pacienteNome=${paciente?.nome}&pacienteCpf=${paciente?.cpf}&medicoNome=${medico?.nome}&especialidade=${medico?.especialidade}`
@@ -144,47 +148,88 @@ export default function TelaConsulta() {
 //BRUNO: ESTILIZAR AQUI (estilos globais dessa tela)
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    flex: 1
+    flex: 1,
+    backgroundColor: '#F3F4F6',
+    paddingHorizontal: 20,
+    paddingTop: 24,
   },
   loading: {
-    padding: 16
-  },
-  titulo: {
-    fontSize: 22,
-    marginBottom: 20,
-    textAlign: 'center'
+    padding: 16,
+    textAlign: 'center',
+    color: '#7A869A',
   },
   cardInfo: {
-    backgroundColor: '#fff',
-    padding: 24,
-    marginBottom: 32
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
   },
   label: {
-    fontSize: 14,
-    marginBottom: 4
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#200C83', 
+    letterSpacing: 0.5,
+    marginBottom: 2,
   },
   valor: {
-    fontSize: 18,
+    fontSize: 15,
+    fontWeight: '500',
+    color: '#1F2937',
+    marginBottom: 16,
   },
   subValor: {
     fontSize: 14,
-    marginTop: 2,
-    color: '#666'
+    marginTop: -12,
+    marginBottom: 16,
+    color: '#666',
   },
   valorStatus: {
-    fontSize: 16,
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#1E5393',
+    marginBottom: 16,
   },
   divisor: {
     height: 1,
-    marginVertical: 16
+    backgroundColor: '#E2E8F0',
+    marginVertical: 8,
+    marginBottom: 16,
   },
-  botaoRemarcar: {
-    marginTop: -28,
-    backgroundColor: '#f5f5f5'
+  botaoSecundario: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  botaoSecundarioTexto: {
+    color: '#1E5393',
+    fontWeight: '700',
+    fontSize: 14,
   },
   botaoCancelar: {
-    marginTop: -28,
-    backgroundColor: '#ffe3e3'
-  }
+    backgroundColor: '#FEE2E2',
+    borderWidth: 1,
+    borderColor: '#FCA5A5',
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  botaoCancelarTexto: {
+    color: '#EF4444',
+    fontWeight: '700',
+    fontSize: 14,
+  },
 });
