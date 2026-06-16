@@ -6,7 +6,7 @@ type Props = {
   medicoNome: string;
   dataHora: string;
   tipo?: string;
-  status: string;
+  status?: string;
   especialidadeMedico?: string;
   onPress: () => void;
 };
